@@ -1,22 +1,53 @@
 # Project Summary
 
 ## Problem
-Lack of apps offering truly local + offline app allowing celiacs to feel comfortable to eat wherever they go. The main struggle is the challenge to identify gluten ingredients and common cross-contamination ingredients wherever they are.
+No reliable offline apps exist for celiacs to identify gluten and cross-contamination risks in food products.
 
 ## Proposal
-Develop a companion application which accomplishes the following:
-- User can add personal settings and everything is kept local/secure.
-- App is usable offline and local first.
-- User can search or scan products to determine risk level.
-- Users can subscribe for updates for favorite products.
-- Users can ask an AI to check common groups both official and social to enhance the report.
+Local-first companion app that:
+- Stores user settings securely offline
+- Enables product search/scanning for risk assessment
+- Provides product update notifications
+- Uses AI to aggregate official and community data
 
 ## Non-functional Requirements
-- Offline support and mobile ready.
-- Model should be accurate and with guardrails.
-- No hallucinations.
-- We will need to address the issue of relying on outdated info, however.
-- Responses should be within 30 seconds - only <5% of requests should be above 1 min.
-- Should be robust in various network conditions.
-- Fault-tolerant and able to be reasonably reliable (close to whatever cloud platforms offer since we build on them).
-- Should be efficient in terms of tokens and ideally economically free via local models.
+- Full offline & mobile support
+- Accurate model with safeguards against hallucinations
+- Strategy for handling outdated data
+- Response time <30s (95th percentile <1min)
+- Network resilient
+- Cloud-grade reliability
+- Efficient token usage with local models for cost optimization
+---
+# Celiac Food Checker API
+
+This is a FastAPI application that helps celiacs determine if a certain food contains gluten.
+
+## Setup
+
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   cd your-repo
+   ```
+
+2. **Create and activate a virtual environment**:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows use `.\venv\Scripts\activate`
+   ```
+
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run the application**:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+## API Endpoints
+
+- **Search for an ingredient**: `GET /v1/foods?q={query}`
+- **Search food by product id/food id**: `GET /v1/foods/{foodId}`
