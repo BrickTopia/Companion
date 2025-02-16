@@ -1,0 +1,423 @@
+{
+  "HYDROLYZED VEGETABLE PROTEIN": {
+    "status": "CHECK LABEL",
+    "aliases": ["HVP", "HYDROLYZED PLANT PROTEIN", "HPP"],
+    "description": "A flavor enhancer produced by the hydrolysis of protein, usually from soy, corn, peanut or wheat flour. If it contains protein from wheat, it is not gluten free. This ingredient name is no longer acceptable on Canadian food labels."
+  },
+  "ICING": {
+    "status": "CHECK LABEL",
+    "aliases": ["FROSTING"],
+    "description": "A mixture of sugar and other ingredients, used for decorating baked goods. May contain wheat flour or wheat starch. Check the ingredient list."
+  },
+  "ICING SUGAR": {
+    "status": "ALLOWED",
+    "aliases": ["CONFECTIONER'S SUGAR"],
+    "description": "Finely ground granulated sugar that contains not more than 5% starch, which is almost always cornstarch."
+  },
+  "IMITATION FISH": {
+    "status": "CHECK LABEL",
+    "aliases": ["SURIMI"],
+    "description": "See SURIMI."
+  },
+  "INULIN": {
+    "status": "ALLOWED",
+    "aliases": ["DHALIN", "ALANT STARCH"],
+    "description": "Soluble polymer of fructose found in plant species such as chicory, artichoke, and leek. It is commercially manufactured from chicory root. Often used as a source of fiber or as a prebiotic in supplements and some foods."
+  },
+  "INVERT SUGAR": {
+    "status": "ALLOWED",
+    "description": "A mixture of simple sugars (fructose and glucose) made from sucrose."
+  },
+  "ISOMALT": {
+    "status": "ALLOWED",
+    "description": "Sugar replacer made from beet sugar."
+  },
+  "JOB'S TEARS": {
+    "status": "ALLOWED",
+    "aliases": ["ADLAY"],
+    "description": "Wild grass (Coix lacryma-jobi), botanically related to maize. Used as a cereal dish in South Asia."
+  },
+  "KAMUT": {
+    "status": "NOT ALLOWED",
+    "aliases": ["KAMUT", "KAWMUT"],
+    "description": "(Triticum turgidum), an ancient relative of durum wheat."
+  },
+  "KARAYA GUM": {
+    "status": "ALLOWED",
+    "description": "A gum from an Indian tree (Sterculia urens), used as a texture modifying agent."
+  },
+  "KASHA": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See BUCKWHEAT GROATS, KASHA. Requires GF claim."
+  },
+  "KELP": {
+    "status": "ALLOWED",
+    "description": "A large edible brown seaweed."
+  },
+  "KETCHUP": {
+    "status": "ALLOWED",
+    "description": "A condiment made from tomato paste, glucose-fructose/sugar, white vinegar, salt, and other spices."
+  },
+  "KOJI": {
+    "status": "CHECK LABEL",
+    "description": "A Japanese term for the mold officially known as Aspergillus Oryzae. When grown on rice, it creates rice koji (cultured rice), which is gluten free. However, koji culture (Aspergillus Oryzae) may also be grown on wheat or barley to produce soy sauce, miso sauce and other seasonings. In this case, the koji mixture is not gluten free."
+  },
+  "KONJAC FLOUR": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Flour derived from tubers of species (Amorphophallus konjac); eaten in Japan as firm jelly."
+  },
+  "KUDZU": {
+    "status": "ALLOWED",
+    "description": "A starchy extract from the root of a Japanese plant (Pueraria lobata), used as a thickener."
+  },
+  "LACTASE": {
+    "status": "ALLOWED",
+    "description": "Enzyme preparation, sold as drops or tablets, which helps breakdown lactose to glucose and galactose. May be useful in managing lactose intolerance."
+  },
+  "LACTOBACILLUS ACIDOPHILUS": {
+    "status": "ALLOWED",
+    "description": "See ACTIVE BACTERIAL CULTURES."
+  },
+  "LACTOBACILLUS BIFIDUS": {
+    "status": "ALLOWED",
+    "description": "See ACTIVE BACTERIAL CULTURES."
+  },
+  "LACTOSE": {
+    "status": "ALLOWED",
+    "description": "A sugar naturally present in milk. It is glucose bound to galactose and may not be tolerated by some individuals with celiac disease."
+  },
+  "LAGER": {
+    "status": "NOT ALLOWED",
+    "aliases": ["ALE", "BEER", "PORTER", "STOUT"],
+    "description": "See BEER."
+  },
+  "LECITHIN": {
+    "status": "ALLOWED",
+    "description": "A substance primarily made from soybean oil, but may also come from corn and other vegetable seeds, egg yolk, and animal sources; used as a texture modifying agent."
+  },
+  "LEGUMES": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Seeds of plants of the family Leguminosae, which includes peanuts and a wide variety of dry peas, lentils and beans including channa, chickpeas (garbanzo beans, bengal gram, besan, gram), mung beans, lima beans, soybeans, urd, etc. Can be sold whole, as a flour or in pasta. Purchase with a GF claim whenever possible."
+  },
+  "LENTILS": {
+    "status": "GLUTEN-FREE CLAIM",
+    "aliases": ["BROWN", "RED", "GREEN"],
+    "description": "A round, flat seed of a leguminous plant (Lens esculenta). Can be sold whole, split, as a flour, or in pasta. Lentils are high risk for gluten cross contact. It is recommended to buy lentils labelled 'gluten free' whenever possible. For lentils that are not labelled 'gluten free' do a visual inspection and remove any foreign grains. Rinse well before using."
+  },
+  "LICORICE": {
+    "status": "CHECK LABEL",
+    "description": "A sweet candy usually made with wheat flour, which is not gluten free. Some specialty brands of licorice do not contain gluten ingredients."
+  },
+  "LICORICE EXTRACT": {
+    "status": "ALLOWED",
+    "description": "Extract of licorice plant (Glycyrrhiza glabra), a leguminous plant."
+  },
+  "LIQUEURS": {
+    "status": "CHECK LABEL",
+    "description": "A mixture of distilled spirits with added flavoring substances or extracts."
+  },
+  "LOCUST BEAN GUM": {
+    "status": "ALLOWED",
+    "aliases": ["CAROB BEAN GUM"],
+    "description": "A gum from a leguminous tropical tree (Ceratonia siliqua), used as a texture modifying agent."
+  },
+  "MAIZE": {
+    "status": "ALLOWED",
+    "aliases": ["CORN"],
+    "description": "See CORN."
+  },
+  "MALT": {
+    "status": "NOT ALLOWED",
+    "aliases": ["BARLEY"],
+    "description": "See BARLEY MALT."
+  },
+  "MALT (RICE)": {
+    "status": "ALLOWED",
+    "description": "See RICE MALT."
+  },
+  "MALT EXTRACT": {
+    "status": "CHECK LABEL",
+    "description": "Malt can be derived from various grains including corn, rice barley or wheat. It is not gluten free when made from barley or wheat."
+  },
+  "MALT FLAVORING": {
+    "status": "CHECK LABEL",
+    "description": "Malt can be derived from various grains including corn, rice wheat or barley. It is not gluten free if made from barley or wheat. See BARLEY MALT FLAVORING."
+  },
+  "MALT SUGAR": {
+    "status": "ALLOWED",
+    "description": "See MALTOSE."
+  },
+  "MALT SYRUP": {
+    "status": "CHECK LABEL",
+    "description": "A syrup derived from malt, used as a flavoring agent. Malt can be derived from various grains including corn, rice wheat or barley. It is not gluten free if made from barley or wheat."
+  },
+  "MALT VINEGAR": {
+    "status": "CHECK LABEL",
+    "description": "Malt can be derived from various grains including corn, rice wheat or barley. It is not gluten free if made from barley or wheat."
+  },
+  "MALTED MILK": {
+    "status": "CHECK LABEL",
+    "description": "A beverage prepared from milk and malted cereals, especially barley."
+  },
+  "MALTITOL": {
+    "status": "ALLOWED",
+    "aliases": ["MALTITOL SYRUP"],
+    "description": "A sugar alcohol derived from corn syrup."
+  },
+  "MALTITOL SYRUP": {
+    "status": "ALLOWED",
+    "description": "See MALTITOL."
+  },
+  "MALTODEXTRIN": {
+    "status": "ALLOWED",
+    "description": "Product made from the hydrolysis of various starches such as corn, potato and rice. In North America, maltodextrins are almost always derived from corn and therefore, are gluten free. While rare, maltodextrin may be made from wheat. Using the most sensitive, scientifically validated RS Elisa tests, no gluten was detected in wheat-based maltodextrin."
+  },
+  "MALTOL": {
+    "status": "ALLOWED",
+    "aliases": ["ETHYL MALTOL"],
+    "description": "A synthetic flavoring agent."
+  },
+  "MALTOSE": {
+    "status": "ALLOWED",
+    "description": "A sugar (glucose bound to glucose) made by enzymatic breakdown of starch (potato, rice, barley or wheat). Although barley or wheat may be used in the product of maltose, the manufacturing process makes maltose gluten free."
+  },
+  "MANIOC": {
+    "status": "ALLOWED",
+    "aliases": ["CASSAVA", "TAPIOCA"],
+    "description": "See CASSAVA."
+  },
+  "MATZO": {
+    "status": "NOT ALLOWED",
+    "aliases": ["MATZOTH"],
+    "description": "Unleavened bread or Passover bread made as thin, flat, round, or square biscuits eaten during the eight days of Passover in place of leavened bread. Most matzo is made from wheat flour and is not allowed. There are brands of gluten-free matzo."
+  },
+  "MATZO MEAL": {
+    "status": "NOT ALLOWED",
+    "description": "A mash made from matzo."
+  },
+  "MAYONNAISE": {
+    "status": "ALLOWED",
+    "description": "A product that is made of vegetable oil, egg yolks, lemon juice and vinegar."
+  },
+  "MAYONNAISE-TYPE DRESSINGS": {
+    "status": "CHECK LABEL",
+    "description": "A product that is made of vegetable oil, egg yolks, lemon juice and vinegar as well as any of the following ingredients: salt, sweetening agents, thickeners, and seasonings. Check the ingredient list for any sources of gluten."
+  },
+  "METHYLCELLULOSE": {
+    "status": "ALLOWED",
+    "description": "A derivative of cellulose used as a texture modified agent."
+  },
+  "MILLET": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A small seed of a cereal grain (Pennisetum glaucum) closely related to corn. Sold as whole seed or as a flour. Requires GF claim."
+  },
+  "MILO": {
+    "status": "GLUTEN-FREE CLAIM",
+    "aliases": ["SORGHUM"],
+    "description": "See SORGHUM. Requires GF claim."
+  },
+  "MIRIN": {
+    "status": "CHECK LABEL",
+    "description": "A Japanese low-alcohol, sweet, golden-colored rice wine used to add sweetness and flavor to glazes, sauces, and variety of dishes. Some brands of imitation mirin cooking sauces use fermented wheat, which is not gluten free."
+  },
+  "MISO": {
+    "status": "CHECK LABEL",
+    "description": "A thick paste made from fermenting soybeans and a common grain such as wheat or barley, which is not gluten free. However, when rice is used, the miso product is gluten free."
+  },
+  "MODIFIED CORNSTARCH": {
+    "status": "ALLOWED",
+    "description": "Cornstarch that has been chemically modified to improve functional properties of foods."
+  },
+  "MODIFIED STARCH": {
+    "status": "ALLOWED",
+    "aliases": ["MODIFIED FOOD STARCH"],
+    "description": "A starch that has been chemically modified to alter its physical characteristics. It is usually derived from corn, rice, potato or tapioca starch which are gluten free. This ingredient name is no longer acceptable on food labels in Canada."
+  },
+  "MOLASSES": {
+    "status": "ALLOWED",
+    "description": "A dark syrup left after crystallization of sugar from sugar cane."
+  },
+  "MONOGLYCERIDE": {
+    "status": "ALLOWED",
+    "description": "An emulsifier derived from vegetable oils."
+  },
+  "MONOSODIUM GLUTAMATE": {
+    "status": "ALLOWED",
+    "aliases": ["MSG"],
+    "description": "A flavor enhancer produced through the fermentation of molasses primarily from sugar cane, corn, or beet sugar. Rarely wheat is used. However, MSG is the purified salt of glutamic acid and contains no residual protein after processing regardless of the source"
+  },
+  "MUSTARD": {
+    "status": "CHECK LABEL",
+    "aliases": ["PREPARED"],
+    "description": "There are many varieties of mustards available on the market. Most consist of distilled vinegar, water, mustard seed, turmeric, salt, paprika, spices, natural flavor, garlic powder and are gluten free. However, some specialty mustard preparations may contain wheat flour, which is not gluten free. Check the ingredient list."
+  },
+  "MUSTARD BRAN": {
+    "status": "ALLOWED",
+    "description": "The outer layer of mustard seed which is removed during milling."
+  },
+  "MUSTARD POWDER": {
+    "status": "CHECK LABEL",
+    "description": "A powder made from pure ground mustard seed."
+  },
+  "MUSTARD POWDER (PREPARED)": {
+    "status": "CHECK LABEL",
+    "description": "A powder made of ground mustard seed, sugar, salt and spices. May also contain wheat flour or wheat starch, which are not gluten free."
+  },
+  "MUSTARD PICKLES": {
+    "status": "CHECK LABEL",
+    "description": "Cucumbers pickled in water, vinegar, mustard spices and seasonings to which wheat flour and/or malt vinegar may be added."
+  },
+  "NIACINAMIDE": {
+    "status": "ALLOWED",
+    "aliases": ["NIACIN"],
+    "description": "A water-soluble compound, also known as vitamin B3. It is naturally found in dairy products, lean meats, nuts and eggs. Used in dietary supplements to prevent or treat niacin deficiency called pellagra."
+  },
+  "NON-DAIRY CREAMERS": {
+    "status": "ALLOWED",
+    "description": "Powder or liquid product containing sugar, corn syrup solids, partially hydrogenated vegetable oils; used as a substitute for dairy-based creamers."
+  },
+  "NORI": {
+    "status": "ALLOWED",
+    "description": "A type of seaweed of the genus Porphyra. See SEAWEED."
+  },
+  "NUTRITIONAL YEAST": {
+    "status": "ALLOWED",
+    "description": "See YEAST (NUTRITIONAL)."
+  },
+  "NUTS (PLAIN OR SALTED)": {
+    "status": "ALLOWED",
+    "description": "Almonds, brazil nuts, cashews, hazelnut (filberts), macadamia, pine (pignolia), pistachios or walnuts, as well as peanuts (a legume)."
+  },
+  "NUTS (DRY ROASTED OR SEASONED)": {
+    "status": "CHECK LABEL",
+    "description": "May be prepared with seasoning mixture containing wheat flour or wheat starch, which are not gluten free."
+  },
+  "NUTS (CORN OR SOY) PLAIN OR SALTED": {
+    "status": "ALLOWED",
+    "description": "Snack food made from corn or soy and vegetable oil."
+  },
+  "NUTS (CORN OR SOY) SEASONED": {
+    "status": "CHECK LABEL",
+    "description": "May be prepared with seasoning mixture containing wheat flour or wheat starch, which are not gluten free."
+  },
+  "NUT BEVERAGE (ALMOND, HAZELNUT)": {
+    "status": "ALLOWED",
+    "description": "A beverage made from water, evaporated cane juice, ground almonds or hazelnuts and flavorings. Used as a substitute for cow's milk."
+  },
+  "OATS (COMMERCIAL) (Not labelled gluten free)": {
+    "status": "NOT ALLOWED",
+    "description": "A cereal (Avena sativa) plant of the grass family. Research has revealed regular oat products have high gluten levels due to cross-contact with gluten-containing grains during seeding, harvest, storage, transportation, processing and/or packaging."
+  },
+  "OATS (PURE, UNCONTAMINATED LABELLED 'GLUTEN FREE')": {
+    "status": "ALLOWED",
+    "description": "Clinical studies have shown that pure, uncontaminated oats are safe for most adults and children with celiac disease. Health Canada has also done extensive reviews of the studies on safety of oats in celiac disease. They conclude that the vast majority of those with celiac disease can safely consume specially processed 'gluten-free' oats. Individuals with celiac disease who wish to add oats or oat products to their diet must ensure that the oats they are eating have a 'gluten-free' claim."
+  },
+  "OAT GUM": {
+    "status": "NOT ALLOWED",
+    "description": "A gum from the oat grain, used as a texture modifying agent."
+  },
+  "OAT MILK": {
+    "status": "CHECK LABEL",
+    "description": "If made with gluten-free oats they are allowed. Avoid products with regular oats."
+  },
+  "ONION (POWDER OR SALT)": {
+    "status": "ALLOWED",
+    "description": "Dried or freeze-dried product made from onions which are dehydrated, ground and salt may be added."
+  },
+  "ORZO": {
+    "status": "NOT ALLOWED",
+    "description": "Orzo is the Italian name for barley and used to describe rice shaped pasta. It is made in North America from semolina (wheat) flour."
+  },
+  "PALM KERNEL OIL": {
+    "status": "ALLOWED",
+    "description": "An oil derived from the seeds (kernels) of palm tree fruit."
+  },
+  "PANTOTHENIC ACID": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as vitamin B5. Naturally found in eggs, fish and milk and whole grain products."
+  },
+  "PAPRIKA": {
+    "status": "ALLOWED",
+    "description": "A spice made from ground pods of a sweet red pepper (Capsicum annum). Used for seasoning."
+  },
+  "PASTA": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Usually made from durum wheat, kamut or spelt flours, which are not gluten free and are not allowed. Pasta made from beans, corn, lentils, potato, pure buckwheat, quinoa, soy or wild rice are allowed with a gluten-free label."
+  },
+  "PEANUTS (PLAIN OR SALTED)": {
+    "status": "ALLOWED",
+    "description": "Seeds of plants of the family Leguminosae."
+  },
+  "PEANUTS (DRY ROASTED OR SEASONED)": {
+    "status": "CHECK LABEL",
+    "description": "Seeds of plants of the family Leguminosae. May be prepared with a seasoning mixture containing wheat flour or wheat starch, which are not gluten free."
+  },
+  "PEAS (DRIED - WHOLE, SPLIT)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See LEGUMES. Purchase with a GF claim whenever possible."
+  },
+  "PEAS (GREEN)": {
+    "status": "ALLOWED",
+    "description": "See LEGUMES, Sold as a fresh, frozen or canned vegetable."
+  },
+  "PEPPER (BLACK OR WHITE)": {
+    "status": "ALLOWED",
+    "description": "A mature berry of a tropical shrub (Piper nigrum). It is sold as whole or ground."
+  },
+  "PHOSPHATE (CALCIUM)": {
+    "status": "ALLOWED",
+    "description": "A white crystalline powder used in baking powders, toothpastes and added to food or sold as a dietary supplement."
+  },
+  "PICKLE": {
+    "status": "ALLOWED",
+    "description": "Vegetables, like cucumbers, beets, etc., marinated in water, white vinegar, sugar, spices, and seasonings."
+  },
+  "PICKLES (MUSTARD)": {
+    "status": "CHECK LABEL",
+    "description": "See MUSTARD PICKLES."
+  },
+  "PLAYDOUGH": {
+    "status": "NOT ALLOWED",
+    "description": "Craft dough made from water, salt and wheat flour. Some brands of children’s playdough contains wheat. Some similar gluten-free products are commercially available."
+  },
+  "POI": {
+    "status": "ALLOWED",
+    "description": "A Polynesian dish made by mashing taro root with water."
+  },
+  "PORT": {
+    "status": "ALLOWED",
+    "description": "A wine fortified with distilled alcohol and sugar."
+  },
+  "PORTER (ALE, BEER, LAGER)": {
+    "status": "NOT ALLOWED",
+    "description": "See BEER."
+  },
+  "POTATO": {
+    "status": "ALLOWED",
+    "description": "A starchy tuber, also sold as fresh vegetable, flour, starch or in a pasta. Potato flour requires a gluten-free claim."
+  },
+  "PSYLLIUM": {
+    "status": "ALLOWED",
+    "description": "A seed (Plantago psyllium) of the plantain family, used as a dietary bulking agent."
+  },
+  "PYRIDOXINE": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as vitamin B6. Naturally found in lean meats, fish, beans and whole grains."
+  },
+  "QUINOA (pronounced keen-wa)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A small seed from a South American plant of the pigweed family Chenopodiaceae. Sold as a seed, flour, flakes, or in pasta (often combined with corn or rice flours). Requires a GF claim."
+  },
+  "RENNET": {
+    "status": "ALLOWED",
+    "description": "A milk coagulant that is the concentrated extract of rennin enzyme obtained from animal sources. It may also be produced through fungal fermentation."
+  },
+  "RIBOFLAVIN": {
+    "status": "ALLOWED",
+    "description": "Water-soluble vitamin, also known as Vitamin B2. Naturally found in lean meats, eggs, legumes, and green leafy vegetables."
+  },
+  "RICE (BLACK, BROWN, WHITE)": {
+    "status": "ALLOWED",
+    "description": "A cereal grain (Oryza sativa) of the grass family Graminae. Sold as a grain, flour, flakes, ground, or in pasta. Rice flour requires a gluten-free claim."
+  }
+}
