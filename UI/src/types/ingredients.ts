@@ -1,13 +1,13 @@
-
 export type IngredientStatus = 'safe' | 'risky' | 'risk' | 'unknown';
 
 export type IngredientCategory = 'grain' | 'dairy' | 'protein' | 'additive' | 'other';
 
-export type Ingredient = {
+export interface Ingredient {
   id: string;
   name: string;
   status: IngredientStatus;
   description: string;
+  alternateNames: string[];
   scientificName?: string;
   category: IngredientCategory;
   tags: string[];
@@ -16,4 +16,4 @@ export type Ingredient = {
     date: string;
     change: string;
   }[];
-};
+}

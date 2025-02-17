@@ -17,6 +17,7 @@ import { IngredientSkeleton } from './IngredientSkeleton';
 import type { Ingredient } from '@/types/ingredients';
 import { FilterSort } from './FilterSort';
 import type { IngredientStatus } from '@/types/ingredients';
+import { useIngredients } from '@/services/ingredientService';
 
 interface IngredientListProps {
   showOnlyFavorites?: boolean;
@@ -90,6 +91,11 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     useState<Ingredient | null>(null);
   const { toast } = useToast();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const {
+    ingredients: fetchedIngredients,
+    isLoading: isLoadingIngredients,
+    error: fetchError,
+  } = useIngredients();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -98,29 +104,28 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  const initialize = useCallback(async () => {
-    try {
-      await initDB();
-      const [savedFavorites, savedIngredients] = await Promise.all([
-        getFavorites(),
-        getIngredients(),
-      ]);
-      setFavorites(savedFavorites);
-      setIngredients(
-        savedIngredients.length ? savedIngredients : mockIngredients
-      );
-    } catch (err) {
-      setError('Failed to load data. Please refresh the page.');
-      console.error('Error initializing:', err);
-      setIngredients(mockIngredients);
-    } finally {
-      setIsLoading(false);
-    }
+  useEffect(() => {
+    const initialize = async () => {
+      try {
+        await initDB();
+        const savedFavorites = await getFavorites();
+        setFavorites(savedFavorites);
+      } catch (err) {
+        setError('Failed to load favorites. Please refresh the page.');
+        console.error('Error initializing:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initialize();
   }, []);
 
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    if (fetchedIngredients) {
+      setIngredients(fetchedIngredients);
+    }
+  }, [fetchedIngredients]);
 
   const toggleFavorite = useCallback(
     async (ingredient: Ingredient) => {
@@ -180,17 +185,21 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     sortOrder,
   ]);
 
-  if (error) {
+  if (error || fetchError) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>
+          {error ||
+            fetchError?.message ||
+            'Failed to load data. Please refresh the page.'}
+        </AlertDescription>
       </Alert>
     );
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingIngredients) {
     return <IngredientSkeleton />;
   }
 
