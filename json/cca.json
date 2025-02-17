@@ -1,4 +1,652 @@
 {
+  "ALPHA-TOCOPHEROL ACETATE": {
+    "status": "ALLOWED",
+    "description": "A fat-soluble vitamin, also known as Vitamin E, which is found in vegetable oils, egg yolk, nuts, etc."
+  },
+  "ACACIA GUM": {
+    "status": "ALLOWED",
+    "alternateNames": ["GUM ACACIA", "GUM ARABIC"],
+    "description": "A gum from trees of the Acacia species, used as a texture modifying agent."
+  },
+  "ACTIVE BACTERIAL CULTURES": {
+    "status": "CHECK LABEL",
+    "description": "Lactic acid producing bacteria used in fermented dairy products e.g., yogurt. They are grown on different types of agar, and include Lactobacillus acidophilus, Lactobacillus bifidus and Streptococcus thermophilus. If made with barley, it is not gluten free. Check label."
+  },
+  "ADDITIVES": {
+    "status": "ALLOWED",
+    "description": "See APPENDIX."
+  },
+  "ADLAY": {
+    "status": "ALLOWED",
+    "alternateNames": ["JOB'S TEARS"],
+    "description": "See JOB'S TEARS."
+  },
+  "AGAR": {
+    "status": "ALLOWED",
+    "alternateNames": ["AGAR AGAR"],
+    "description": "A gelatinous extract from certain algae, used as a texture modifying agent."
+  },
+  "ALANT STARCH": {
+    "status": "ALLOWED",
+    "alternateNames": ["DHALIN"],
+    "description": "See INULIN."
+  },
+  "ALE": {
+    "status": "NOT ALLOWED",
+    "alternateNames": ["BEER", "LAGER", "PORTER", "STOUT"],
+    "description": "See BEER."
+  },
+  "ALFALFA SPROUTS": {
+    "status": "ALLOWED",
+    "description": "Sprouted seeds (Medicago sativa) of a member of the legume family."
+  },
+  "ALGIN": {
+    "status": "ALLOWED",
+    "alternateNames": ["ALGINIC ACID"],
+    "description": "A gum obtained from a brown marine algae (Macrocystis pyrifera). Used as a texture modifying agent."
+  },
+  "AMARANTH": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A starchy seed of the Amaranthaceae family. Sold as seed, flour or cereal. May also refer to a red food color, which is allowed. Requires GF claim."
+  },
+  "ANNATTO": {
+    "status": "ALLOWED",
+    "description": "A yellowish to reddish-orange color obtained from the seed coating of the tree (Bixa orellanna). It is often used to color sausage casings, margarine, shortening, and cheese."
+  },
+  "ARROWROOT": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A starchy flour from the roots of a plant species (Maranta arundinacea) native to the West Indies."
+  },
+  "ARROWROOT BISCUIT": {
+    "status": "NOT ALLOWED",
+    "description": "Biscuits made with wheat flour and arrowroot flour."
+  },
+  "ARTIFICIAL FLAVOR": {
+    "status": "ALLOWED",
+    "description": "See FLAVOR."
+  },
+  "ASAFOETIDA": {
+    "status": "CHECK LABEL",
+    "description": "A perennial plant (Ferula assafoetida) used as a spice in South Asian cuisine. The most commonly available form is a seasoning blend of a fine powder containing 30% asafoetida, along with rice or wheat flour and gum arabic."
+  },
+  "ASCORBIC ACID": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as Vitamin C, naturally found in citrus fruits and other fruits and vegetables. It is used as a preservative in foods."
+  },
+  "ASPARTAME": {
+    "status": "ALLOWED",
+    "description": "An artificial sweetener about 200 times as sweet as sugar."
+  },
+"ATTA": {
+    "status": "NOT ALLOWED",
+    "description": "A whole meal fine textured flour made from a low gluten soft wheat (Triticum vulgari) used to make South Asian flatbread (also known as chapatti flour)."
+  },
+  "AUTOLYZED YEAST": {
+    "status": "CHECK LABEL",
+    "description": "See YEAST (AUTOLYZED)."
+  },
+  "BACON": {
+    "status": "CHECK LABEL",
+    "description": "A cut of meat taken from the sides, belly, or back of a pig, then cured, smoked, or both. While most brands of bacon are gluten free, but some contain wheat. Check label for gluten sources. Although rare, some brands may include an added wheat derivative in the seasoning."
+  },
+  "BACON BITS (REAL)": {
+    "status": "CHECK LABEL",
+    "description": "Small bits of cooked real bacon used as topping for salads and side dishes. While most brands of real bacon bits are gluten free, some contain wheat. Check label for gluten sources."
+  },
+  "BACON BITS (IMITATION)": {
+    "status": "CHECK LABEL",
+    "description": "Small bits of textured vegetable protein artificially flavored to resemble bacon. Used as topping for salads and side dishes. May contain wheat flour or hydrolyzed wheat protein which are not gluten free."
+  },
+  "BACTERIAL CULTURES": {
+    "status": "CHECK LABEL",
+    "description": "See ACTIVE BACTERIAL CULTURES."
+  },
+  "BAKING POWDER": {
+    "status": "CHECK LABEL",
+    "description": "A leavening agent usually made with cornstarch, which is gluten free. Although rare, some brands may include wheat starch, which is not gluten free."
+  },
+  "BAKING SODA": {
+    "status": "ALLOWED",
+    "description": "A leavening agent used in baked good recipes. Also known as sodium bicarbonate or bicarbonate of soda. Sodium bicarbonate, synthetically derived."
+  },
+  "BARLEY": {
+    "status": "NOT ALLOWED",
+    "description": "A cereal plant (Hordein vulgare) or (Hordein disticon). Its grain contains gluten."
+  },
+  "BARLEY FLOUR": {
+    "status": "NOT ALLOWED",
+    "description": ""
+  },
+  "BARLEY GRASS": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "The leaves of barley grass do not contain gluten but the seeds have gluten. Some barley grass products have been found to have significant gluten contamination. Look for a product that has been tested for gluten and is labelled \"gluten free.\""
+  },
+  "BARLEY MALT": {
+    "status": "NOT ALLOWED",
+    "description": "Barley grain which has been soaked, germinated, and dried."
+  },
+  "BARLEY MALT EXTRACT": {
+    "status": "NOT ALLOWED",
+    "description": "An extract of barley, used as a flavoring agent."
+  },
+  "BARLEY MALT FLAVORING": {
+    "status": "NOT ALLOWED",
+    "description": "An extract of barley, used as a flavoring agent."
+  },
+  "BARLEY MALT SYRUP": {
+    "status": "NOT ALLOWED",
+    "description": "See MALT SYRUP."
+  },
+  "BARLEY STARCH": {
+    "status": "NOT ALLOWED",
+    "description": "A starch extracted from barley flour; contains varying levels of gluten and is NOT ALLOWED."
+  },
+  "BEANS (DRY)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See LEGUMES."
+  },
+  "BEER": {
+    "status": "NOT ALLOWED",
+    "description": "Check for barley, rye and/or wheat-based alcoholic beverages. These beverages are made by the fermentation of germinated barley, rye and/ or wheat which are not gluten free."
+  },
+  "BEER (GLUTEN REMOVED)": {
+    "status": "NOT ALLOWED",
+    "description": ""
+  },
+"BEER_GLUTEN_FREE": {
+    "status": "ALLOWED",
+    "description": "Alcoholic beverage made from buckwheat, rice, millet, or sorghum, which are gluten free."
+  },
+  "BENGAL_GRAM": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See CHICKPEA.",
+    "aliases": ["besan", "channa", "chickpea", "garbanzo beans", "gram"]
+  },
+  "BESAN": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See CHICKPEA.",
+    "aliases": ["bengal gram", "channa", "chickpea", "garbanzo beans", "gram"]
+  },
+  "BETA_CAROTENE": {
+    "status": "ALLOWED",
+    "description": "A pigment that gives orange, yellow or red color to foods such as carrots, sweet potatoes and peaches. It is converted in the body into vitamin A and is used as a food additive or as a color agent in pharmaceutical products.",
+    "aliases": ["carotene"]
+  },
+  "BICARBONATE_OF_SODA": {
+    "status": "ALLOWED",
+    "description": "See BAKING SODA."
+  },
+  "BIOTIN": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as vitamin B7, is naturally found in foods such as egg yolk, beef liver and yeast."
+  },
+  "BLUE_CHEESE": {
+    "status": "ALLOWED",
+    "description": "Blue cheese is a classification of cow's milk or goat's milk cheeses with green/bluish mould. Varieties include Stilton, Blue Shropshire, Blue Cheshire, Blue Wensleydale, Buton Blue, Blue Vinney, Danish Blue, Roquefort and Gorgonzola. P. Roqueforti cultures may be grown on either gluten free or gluten-containing media. Following fermentation, the spores are collected, and the medium is discarded. Cultures (or spores) are then diluted, based on manufacturer's specifications to 1:500,000 to 1:1,000,000 (where 1 unit is 1 g of P. Roqueforti culture). This is equivalent to 1 gram of mold in 10,000 liters of milk. Based on the latest, most sensitive scientifically validated RS Elisa (Sandwich and Competitive methods) tests, no gluten was detected in blue cheese samples tested by Health Canada."
+  },
+  "BRANDY": {
+    "status": "ALLOWED",
+    "description": "See DISTILLED ALCOHOLIC BEVERAGES."
+  },
+  "BREAD_SPROUTED_GLUTEN_CONTAINING_GRAINS": {
+    "status": "NOT ALLOWED",
+    "description": "Breads made from gluten-containing grains which have been left to sprout. While the germination process may partially breakdown the protein in the germ, it is not gluten-free bread."
+  },
+  "BREWERS_YEAST": {
+    "status": "NOT ALLOWED",
+    "description": "See YEAST (BREWER'S)."
+  },
+  "BUCKWHEAT": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A starchy seed of the plant family Polygonaceae, which includes rhubarb. It is sold as seed, flour, or cereal. Requires a GF claim."
+  },
+  "BUCKWHEAT_FLOUR": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Pure buckwheat flour is gluten free. However, some companies mix buckwheat flour with wheat flour, which is not gluten free. Requires a GF claim."
+  },
+  "BUCKWHEAT_GROATS": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "The kernel inside the shell of the buckwheat seed. Requires a GF claim."
+  },
+  "BUCKWHEAT_GROATS_KASHA": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Buckwheat groats which have been roasted. Requires a GF claim."
+  },
+  "BUCKWHEAT_PASTA": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See SOBA PASTA.",
+    "aliases": ["soba pasta"]
+  },
+  "BULGUR_WHEAT": {
+    "status": "NOT ALLOWED",
+    "description": "Parboiled wheat which is then dried and cracked.",
+    "aliases": ["burghul"]
+  },
+  "BURGHUL": {
+    "status": "NOT ALLOWED",
+    "description": "See BULGUR WHEAT.",
+    "aliases": ["bulgur wheat"]
+  },
+"BURNT SUGAR (CARAMEL, CARMEL)": {
+    "status": "ALLOWED",
+    "description": "See CARAMEL."
+  },
+  "BUTTER": {
+    "status": "ALLOWED",
+    "description": "A dairy product obtained by churning the fat from milk until it solidifies."
+  },
+  "BUTTERMILK SOLIDS": {
+    "status": "ALLOWED",
+    "description": "Fermented milk solids."
+  },
+  "CAROB BEAN GUM (LOCUST BEAN GUM)": {
+    "status": "ALLOWED",
+    "description": "See LOCUST BEAN GUM."
+  },
+  "CAROTENE (BETA CAROTENE)": {
+    "status": "ALLOWED",
+    "description": "See BETA CAROTENE."
+  },
+  "CARRAGEENAN": {
+    "status": "ALLOWED",
+    "description": "A gum derived from an Irish Moss seaweed (Chondrus crispus), used as a texture modifying agent."
+  },
+  "CALCIUM (ACETATE, CARBONATE, CITRATE, FUMARATE, GLUCONATE)": {
+    "status": "ALLOWED",
+    "description": "Forms of calcium used in food supplements to prevent or treat calcium deficiencies."
+  },
+  "CALCIUM PANTOTHENATE": {
+    "status": "ALLOWED",
+    "description": "See PANTOTHENIC ACID."
+  },
+  "CALCIUM PHOSPHATE": {
+    "status": "ALLOWED",
+    "description": "See PHOSPHATE (CALCIUM)."
+  },
+  "CARAMEL (BURNT SUGAR, CARMEL)": {
+    "status": "ALLOWED",
+    "description": "A brown coloring made by heating sugar or glucose in the presence of acid or alkali, used for coloring foods and confections."
+  },
+  "CARAWAY": {
+    "status": "ALLOWED",
+    "description": "The dried ripe seed (Carum carvi) of a plant of the parsley family, used as a spice."
+  },
+  "CARBOXYMETHYLCELLULOSE (CELLULOSE GUM)": {
+    "status": "ALLOWED",
+    "description": "A derivative of cellulose, used as a texture modifying agent."
+  },
+  "CARMEL (BURNT SUGAR, CARAMEL)": {
+    "status": "ALLOWED",
+    "description": "See CARAMEL."
+  },
+  "CAROB BEAN (ST. JOHN ' S BREAD)": {
+    "status": "ALLOWED",
+    "description": "The pods of the carob tree (Ceratonia siliqua), which may be ground and used as a chocolate substitute."
+  },
+  "CASSAVA (MANIOC, TAPIOCA)": {
+    "status": "ALLOWED",
+    "description": "A starchy edible root of a tropical plant (Manihot utilissima), used as a texture modifying agent."
+  },
+  "CAYENNE PEPPER": {
+    "status": "ALLOWED",
+    "description": "A very hot, ground pepper (Capsicum frutescens L.)."
+  },
+  "CELLULOSE GUM (CARBOXYMETHYLCELLULOSE)": {
+    "status": "ALLOWED",
+    "description": "See CARBOXYMETHYL CELLULOSE."
+  },
+  "CHANNA (CHANA)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A type of chickpea grown in the East Indies, sold as peas or ground into flour. Purchase Channa flour GF whenever possible. See CHICKPEA."
+  },
+  "CHEESE (BLUE)": {
+    "status": "ALLOWED",
+    "description": "See BLUE CHEESE."
+  },
+  "CHEESE (BRIE, CAMEMBERT, CHEDDAR, COTTAGE, FETA, MOZZARELLA, PARMESAN, ROMANO, ETC.)": {
+    "status": "ALLOWED",
+    "description": "Made from milk curdled with rennet or lactic acid enzymes."
+  },
+  "CHEESE POWDER": {
+    "status": "ALLOWED",
+    "description": "A dry form of cheese. It may sometimes be spray-dried with maltodextrin or a whey powder carrier."
+  },
+"CHEWING GUM": {
+    "status": "CHECK LABEL",
+    "description": "Sweetened product made from gum base, softeners, flavorings, and colourings."
+  },
+  "CHICORY": {
+    "status": "ALLOWED",
+    "description": "The root of the plant (Cichorium intybus), which is roasted and ground. It can be used as a flavoring or substitute for coffee or a source of inulin (SEE INULIN)."
+  },
+  "CHICKPEA (BENGAL GRAM, BESAN, CHANNA, GARBANZO BEANS, GRAM)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A legume (Cicer areitunum) used whole or ground as flour. Purchase chickpea flour with a GF whenever possible."
+  },
+  "CHILI POWDER": {
+    "status": "ALLOWED",
+    "description": "A blend of spices of which the major ingredient is chili pepper. Other ingredients may include red pepper, paprika, onion, garlic, cumin, oregano, salt and sometimes other spices."
+  },
+  "CHILI SAUCE": {
+    "status": "CHECK LABEL",
+    "description": "A spicy sauce made from chili peppers and other ingredients. Most chili sauce products are gluten free. While rare, some chili sauce products may contain rice vinegar which uses wheat in the fermentation process and are not gluten-free. See RICE VINEGAR."
+  },
+  "CHOCOLATE": {
+    "status": "CHECK LABEL",
+    "description": "A product made from ground roasted cacao beans. The kernels of fermented and roasted cacao beans are ground into a paste called chocolate liquor, which may be hardened in molds to form baking (bitter) chocolate or combined with other ingredients to make semi-sweet or milk chocolate. Examples include baking chocolate, chocolate chips and chocolate wafers."
+  },
+  "CHOCOLATES AND CHOCOLATE BARS": {
+    "status": "CHECK LABEL",
+    "description": "Some chocolates and chocolate bars may contain wheat flour, wheat starch or barley malt or barley malt flavoring. Check the ingredient list."
+  },
+  "CHOLECALCIFEROL": {
+    "status": "ALLOWED",
+    "description": "Also known as Vitamin D3 and added to milk, margarine, and cereals."
+  },
+  "CIDER VINEGAR": {
+    "status": "ALLOWED",
+    "description": "See VINEGAR (CIDER)."
+  },
+  "CITRIC ACID": {
+    "status": "ALLOWED",
+    "description": "An organic acid made when yeast or bacterial ferment glucose or dextrose from corn, beet sugar, molasses and rarely wheat. The manufacturing process makes citric acid gluten free regardless of the source."
+  },
+  "COCOA POWDER": {
+    "status": "ALLOWED",
+    "description": "The roasted ground beans of the cacao tree which are pressed to reduce the cocoa butter (vegetable fat) content and then is made into a powder."
+  },
+  "COLOURS": {
+    "status": "ALLOWED",
+    "description": "Food colours including amaranth, annatto, beta-carotene, and tartrazine do not contain gluten. Some food colours, such as tartrazine, may cause a reaction in a few individuals which is unrelated to gluten."
+  },
+  "CONFECTIONER'S SUGAR (ICING SUGAR)": {
+    "status": "ALLOWED",
+    "description": "See ICING SUGAR."
+  },
+  "CORN (MAIZE)": {
+    "status": "ALLOWED",
+    "description": "A cereal (Zea mays) widely used in gluten-free diets. Sold as fresh vegetable, or dried and ground into flour, cornmeal, cornstarch, or grits (hominy). Corn flour and cornmeal are higher risk of gluten cross-contact and require a GF claim."
+  },
+  "CORN GLUTEN": {
+    "status": "ALLOWED",
+    "description": "The protein in corn, also known as zein prolamin. This prolamin does not have a toxic effect on the intestine of persons with celiac disease. It is therefore allowed in the gluten-free diet."
+  },
+  "CORNSTARCH": {
+    "status": "ALLOWED",
+    "description": "It is produced from the starchy endosperm of the corn kernel and is highly refined."
+  },
+  "COUSCOUS": {
+    "status": "NOT ALLOWED",
+    "description": "A dish prepared with coarsely ground durum wheat."
+  },
+  "CREAM OF TARTAR (TARTARIC ACID)": {
+    "status": "ALLOWED",
+    "description": "A powder (potassium bitartrate) that is used in baking powders as an acid adjusting agent."
+  },
+  "CURRY PASTE": {
+    "status": "CHECK LABEL",
+    "description": "A paste made from the slightly acid, jelly-like pulp of the tamarind pod, combined with a variety of spices. Some curry pastes contain wheat flour or wheat gluten."
+  },
+  "CURRY POWDER": {
+    "status": "CHECK LABEL",
+    "description": "A mixture of turmeric with spices that can include cardamom, cinnamon, cloves, coriander, cumin, and fenugreek, made pungent with mustard, chili, and pepper. Carefully read the label for any gluten-containing ingredients or flours which are not allowed."
+  },
+  "CYANOCOBALAMIN": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as Vitamin B12. It is naturally found in animal flesh or animal products (eggs, milk, etc.)."
+  },
+  "CYCLAMATE": {
+    "status": "ALLOWED",
+    "description": "An artificial sweetener that is 30-50 times as sweet as sugar."
+  },
+  "DASHEEN (EDDO, TARO)": {
+    "status": "ALLOWED",
+    "description": "See TARO."
+  },
+  "DEXTRIN": {
+    "status": "CHECK LABEL",
+    "description": "A slightly sweet polysaccharide obtained by heating a starch in the presence of small amounts of moisture and an acid. Dextrin is not commonly used in foods. It is almost always derived from any of the following gluten-free grains - corn, waxy maize, arrowroot, rice, tapioca. However, in the rare instance when it is made from wheat, dextrin is NOT ALLOWED."
+  },
+  "DEXTROSE": {
+    "status": "ALLOWED",
+    "description": "Glucose made by the hydrolysis of a variety of starches, including corn, potato or wheat, followed by purification and crystallization. The manufacturing process makes dextrose gluten free regardless of the source of starch."
+  },
+  "DHALIN (ALANT STARCH)": {
+    "status": "ALLOWED",
+    "description": "See INULIN."
+  },
+  "DIGLYCERIDE": {
+    "status": "ALLOWED",
+    "description": "An emulsifier derived from vegetable oils."
+  },
+  "DILL PICKLE": {
+    "status": "ALLOWED",
+    "description": "See PICKLES."
+  },
+  "DINKEL (DINKLE, FARRO, FARO, GERMAN WHEAT, SPELT)": {
+    "status": "NOT ALLOWED",
+    "description": "See SPELT."
+  },
+  "DISTILLED ALCOHOLIC BEVERAGES": {
+    "status": "ALLOWED",
+    "description": "Some examples include bourbon, brandy, gin, rye whiskey, scotch whiskey and vodka. Rum is distilled from sugar cane. Brandy is distilled from wine and bourbon is distilled from a grain mash including corn. Since the distillation process does not allow proteins to enter the final product, distilled alcohols are gluten free even if derived from a gluten-containing grain (e.g., rye whiskey)."
+  },
+  "DURUM WHEAT": {
+    "status": "NOT ALLOWED",
+    "description": "A hard wheat (Triticum durum), often used in pasta."
+  },
+  "ETHYL MALTOL (MALTOL)": {
+    "status": "ALLOWED",
+    "description": "See MALTOL."
+  },
+  "FARINA": {
+    "status": "NOT ALLOWED",
+    "description": "A flour, or meal, which can be fine or coarse, usually made from wheat and is not gluten free."
+  },
+  "EDDO (DASHEEN, TARO)": {
+    "status": "ALLOWED",
+    "description": "See TARO."
+  },
+  "EGG (LIQUID)": {
+    "status": "ALLOWED",
+    "description": "Egg mixture containing egg yolk, egg white and emulsifiers."
+  },
+  "EGG (DRIED OR POWDER)": {
+    "status": "ALLOWED",
+    "description": "A blend of dried whole eggs, non-fat dry milk, soybean oil and salt. Beta-carotene and silicone dioxide are gluten-free additives which are sometimes used to improve color and prevent caking."
+  },
+  "EGG (SUBSTITUTE)": {
+    "status": "ALLOWED",
+    "description": "Mixture of liquid egg white, corn oil, gluten-free vegetable gums, emulsifiers and vitamins."
+  },
+  "EINKORN (EIKORN)": {
+    "status": "NOT ALLOWED",
+    "description": "An ancient variety of wheat (Triticum monococcum)."
+  },
+  "EMMER": {
+    "status": "NOT ALLOWED",
+    "description": "An ancient variety of wheat (Triticum dicoccum)."
+  },
+  "EMULSIFIERS": {
+    "status": "ALLOWED",
+    "description": "Naturally derived compounds (such as lecithins, mono- and di-glycerides) used to improve the quality and processing of foods See LECITHIN and MONO/DIGLYCERIDES."
+  },
+  "ENRICHED FLOUR (ENRICHED WHITE FLOUR, FLOUR, WHITE FLOUR)": {
+    "status": "NOT ALLOWED",
+    "description": "See FLOUR."
+  },
+  "ERGOCALCIFEROL": {
+    "status": "ALLOWED",
+    "description": "Fat soluble vitamin, also known as Vitamin D2. Added to milk, margarine, and cereals."
+  },
+  "FARRO (DINKEL, DINKLE, FARO, GERMAN WHEAT, SPELT)": {
+    "status": "NOT ALLOWED",
+    "description": "See SPELT."
+  },
+  "FERROUS (FUMARATE, GLUCONATE, SUCCINATE, SULFATE)": {
+    "status": "ALLOWED",
+    "description": "Synthetic forms of the mineral iron. Used most commonly as a supplement to prevent or treat iron deficiency anemia."
+  },
+  "FLAVOUR (NATURAL AND ARTIFICIAL)": {
+    "status": "ALLOWED",
+    "description": "Gluten-containing grains are not commonly used in flavour preparations. The exceptions are hydrolyzed wheat protein and barley malt flavouring. Both of these flavour components must be identified as WHEAT or BARLEY on the label of all products in Canada."
+  },
+  "FLAX": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "A shiny brown seed of the Linaceae family. Available as a whole seed or ground (flaxmeal, flax flour or ground). Flax is naturally gluten free. However, it may be grown on land where wheat, rye, or barley had previously been grown and harvested. It may also be transported and/or processed in a facility that handles gluten-containing grains. It is recommended to purchase flax seeds with a \"gluten-free\" claim."
+  },
+  "FLOUR SALT": {
+    "status": "ALLOWED",
+    "description": "Finely ground salt with an added anti-caking agent."
+  },
+"FLOUR": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "All flours are considered high-risk for cross-contact and require a gluten-free claim. \"Wheat flour\" can be called white flour, enriched flour or enriched white flour and is not allowed."
+  },
+  "FOLATE (FOLIC ACID, FOLACIN)": {
+    "status": "ALLOWED",
+    "description": "See FOLIC ACID."
+  },
+  "FOLIC ACID (FOLACIN, FOLATE)": {
+    "status": "ALLOWED",
+    "description": "A water-soluble vitamin, also known as vitamin B9, which is naturally found in leafy and dark green vegetables, as well as citrus fruits. Used to fortify wheat flour and other grain products or found in dietary supplements to prevent or treat folate deficiency as well as other medical conditions, like neural tube defects."
+  },
+  "FRUIT SUGAR (FRUCTOSE)": {
+    "status": "ALLOWED",
+    "description": "Crystallized sucrose is sometimes sold as fruit sugar."
+  },
+  "FU": {
+    "status": "NOT ALLOWED",
+    "description": "A dried gluten product derived from wheat, available in thin sheets or thick round cakes. Mixed into soups and vegetable dishes as a protein supplement in Asian cuisines."
+  },
+  "FOLACIN (FOLIC ACID, FOLATE)": {
+    "status": "ALLOWED",
+    "description": "See FOLIC ACID."
+  },
+  "FOOD ADDITIVE": {
+    "status": "ALLOWED",
+    "description": "A substance added to food to aid in processing - see APPENDIX."
+  },
+  "FOOD COLOURS": {
+    "status": "ALLOWED",
+    "description": "See COLOURS."
+  },
+  "FROSTING (ICING)": {
+    "status": "CHECK LABEL",
+    "description": "See ICING."
+  },
+  "FRUCTOSE (FRUIT SUGAR)": {
+    "status": "ALLOWED",
+    "description": "A simple sugar naturally found in most fruits. Fructose can be manufactured from sucrose (sugar; glucose bound to fructose) and used as a sweetener."
+  },
+  "FRUCTOSE SYRUP": {
+    "status": "ALLOWED",
+    "description": "A syrup made from fructose e.g., high fructose corn syrup."
+  },
+  "FRUIT JUICE CONCENTRATE": {
+    "status": "ALLOWED",
+    "description": "Fruit juice which is clarified, filtered, and concentrated through evaporation."
+  },
+  "GARBANZO BEANS (BENGAL GRAM, BESAN, CHANNA, CHICKPEA, GRAM)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See CHICKPEA. - pulses are high risk for gluten cross contact/contamination. Purchase with a GF claim whenever possible."
+  },
+  "GARLIC": {
+    "status": "ALLOWED",
+    "description": "The bulb of a perennial plant (Allium sativum) of the lily family, used for seasoning."
+  },
+  "GARLIC (POWDER OR SALT)": {
+    "status": "ALLOWED",
+    "description": "Dehydrated, crushed garlic, to which salt may be added."
+  },
+  "GELATIN": {
+    "status": "ALLOWED",
+    "description": "A protein obtained from animal skins and tissues, used as a texture modifying agent."
+  },
+  "GERMAN WHEAT (DINKEL, DINKLE, FARRO, FARO, SPELT)": {
+    "status": "NOT ALLOWED",
+    "description": "See SPELT."
+  },
+  "GIN": {
+    "status": "ALLOWED",
+    "description": "See DISTILLED ALCOHOLIC BEVERAGES."
+  },
+  "GLUCONO-DELTA LACTONE": {
+    "status": "ALLOWED",
+    "description": "Used as an acid adjusting agent in sausages, frankfurters, and some dessert mixes."
+  },
+  "GLUCOSE": {
+    "status": "ALLOWED",
+    "description": "A common simple sugar used as sweetener."
+  },
+"GLUCOSE SYRUPS": {
+    "status": "ALLOWED",
+    "description": "A purified concentrated water-soluble solution of sugars. Glucose syrups can be made from a variety of starches such as corn, potato or wheat. The manufacturing process renders glucose syrups gluten free regardless of the source of starch."
+  },
+  "GLUTEN": {
+    "status": "NOT ALLOWED",
+    "description": "A sticky protein which gives structure to baked products. Found in wheat, rye, barley, triticale, spelt, kamut and other related grains (einkorn, emmer, dinkle). Protein from corn is sometimes called corn gluten and is allowed."
+  },
+  "GLUTEN FLOUR": {
+    "status": "NOT ALLOWED",
+    "description": "Wheat flour from which part of the starch has been removed."
+  },
+  "GLUTINOUS (SWEET) RICE": {
+    "status": "CHECK LABEL",
+    "description": "See RICE (GLUTINOUS)."
+  },
+  "GUAIAC GUM": {
+    "status": "ALLOWED",
+    "description": "Natural resin from the tree (Guajacum officinale) and some related tropical trees. Used as a preservative or antioxidant in colas."
+  },
+  "GUAR GUM (GUARAN)": {
+    "status": "ALLOWED",
+    "description": "A gum extracted from (Cyamopsis tetragonoloba) plant, used as a texture modifying agent."
+  },
+  "GUARAN": {
+    "status": "ALLOWED",
+    "description": "See GUAR GUM."
+  },
+  "GUM ACACIA": {
+    "status": "ALLOWED",
+    "description": "See ACACIA GUM."
+  },
+  "GUM ARABIC": {
+    "status": "ALLOWED",
+    "description": "See ACACIA GUM."
+  },
+  "HAM": {
+    "status": "CHECK LABEL",
+    "description": "The cured leg of pork. It may be fresh, cured, or cured-and smoked. While most hams are gluten free, some hams may include glazes or ingredients that contain gluten. A few brands of honey ham or black forest ham were found to use glazes and ingredients containing wheat flour, wheat starch or soy sauce (containing wheat)."
+  },
+  "GLYCERINE (GLYCEROL)": {
+    "status": "ALLOWED",
+    "description": "A synthetically manufactured product from vegetable and animal oils and fats or by fermentation of glucose with yeast."
+  },
+  "GLYCEROL (GLYCERINE)": {
+    "status": "ALLOWED",
+    "description": "See GLYCERINE."
+  },
+  "GRAHAM FLOUR": {
+    "status": "NOT ALLOWED",
+    "description": "Wheat flour to which part of the bran and other parts of the wheat kernel have been added."
+  },
+  "GRAM (CHICKPEA, GARBANZO BEANS, BENGAL GRAM, BESAN)": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "See CHICKPEA. Pulses are high risk for cross-contact with gluten-containing grains. It is recommended to buy pulses labelled \"gluten-free\" whenever possible or visually inspect and sort to remove any gluten-containing grains."
+  },
+  "HEMP SEEDS": {
+    "status": "GLUTEN-FREE CLAIM",
+    "description": "Hemp seeds are naturally gluten free. However, they may have been grown on land where wheat, rye or barley have previously been grown and harvested. Also, hemp seeds may be transported with and/or processed in a facility that handles gluten-containing grains. It is recommended to purchase hemp seeds with a \"gluten-free\" claim."
+  },
+  "HOPS": {
+    "status": "ALLOWED",
+    "description": "The flowers of a plant of the hemp family, used to flavor malt liquors."
+  },
+  "HYDROGENATED VEGETABLE OIL": {
+    "status": "ALLOWED",
+    "description": "A modified oil from vegetable sources."
+  },  
   "HYDROLYZED VEGETABLE PROTEIN": {
     "status": "CHECK LABEL",
     "aliases": ["HVP", "HYDROLYZED PLANT PROTEIN", "HPP"],
