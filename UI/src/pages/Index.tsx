@@ -1,27 +1,14 @@
 import { Card } from '@/components/ui/card';
 import { Search, Info, Settings, Camera } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import IngredientList from '@/components/ingredients/IngredientList';
 import { SettingsPanel } from '@/components/settings/SettingsPanel';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-// Create a promise outside the component
-let loadingPromise: Promise<void> | null = new Promise((resolve) => {
-  setTimeout(() => {
-    resolve();
-    loadingPromise = null;
-  }, 10000);
-});
-
 const Index = () => {
   const [activeTab, setActiveTab] = useState('ingredients');
   const navigate = useNavigate();
-
-  // Throw the promise if it exists
-  if (loadingPromise) {
-    throw loadingPromise;
-  }
 
   const renderContent = () => {
     switch (activeTab) {

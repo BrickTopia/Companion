@@ -17,6 +17,7 @@ import { IngredientSkeleton } from './IngredientSkeleton';
 import type { Ingredient } from '@/types/ingredients';
 import { FilterSort } from './FilterSort';
 import type { IngredientStatus } from '@/types/ingredients';
+import { createResource } from '@/utils/suspense';
 import { useIngredients } from '@/services/ingredientService';
 
 interface IngredientListProps {
@@ -88,19 +89,15 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     IngredientStatus | 'all'
   >('all');
   const [sortOrder, setSortOrder] = useState<'name' | 'status'>('name');
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showOnlyFavoritesState, setShowOnlyFavoritesState] =
     useState(showOnlyFavorites);
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
   const { toast } = useToast();
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const {
-    ingredients: fetchedIngredients,
-    isLoading: isLoadingIngredients,
-    error: fetchError,
-  } = useIngredients();
+
+  // Use the service directly
+  const ingredients = useIngredients();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -118,19 +115,11 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
       } catch (err) {
         setError('Failed to load favorites. Please refresh the page.');
         console.error('Error initializing:', err);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     initialize();
   }, []);
-
-  useEffect(() => {
-    if (fetchedIngredients) {
-      setIngredients(fetchedIngredients);
-    }
-  }, [fetchedIngredients]);
 
   const toggleFavorite = useCallback(
     async (ingredient: Ingredient) => {
@@ -190,22 +179,16 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     sortOrder,
   ]);
 
-  if (error || fetchError) {
+  if (error) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          {error ||
-            fetchError?.message ||
-            'Failed to load data. Please refresh the page.'}
+          {error || 'Failed to load data. Please refresh the page.'}
         </AlertDescription>
       </Alert>
     );
-  }
-
-  if (isLoading || isLoadingIngredients) {
-    return <IngredientSkeleton />;
   }
 
   return (

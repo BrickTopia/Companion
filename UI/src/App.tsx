@@ -12,7 +12,7 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading fullScreen />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/scan" element={<ScanLabel />} />

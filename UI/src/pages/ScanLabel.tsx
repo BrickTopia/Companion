@@ -14,7 +14,7 @@ import { Card } from '@/components/ui/card';
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CameraCapture } from '@/components/camera/CameraCapture';
-import { createWorker } from 'tesseract.js';
+import { ocrService } from '@/services/ocr';
 import { toast } from 'sonner';
 import { EditableIngredientList } from '@/components/ingredients/EditableIngredientList';
 import { useIngredients } from '@/services/ingredientService';
@@ -28,8 +28,17 @@ import {
 } from '@/utils/indexedDB';
 import { nanoid } from 'nanoid';
 import { ScannedLabel } from '@/types/scannedLabel';
+import Loading from '@/components/Loading';
+import type { Ingredient } from '@/types/ingredients';
 
 type Step = 'capture' | 'edit' | 'review';
+
+const ocrLoadingMessages = [
+  'Reading ingredients from image...',
+  'Processing label text...',
+  'Analyzing ingredients...',
+  'Almost done...',
+];
 
 const ScanLabel = () => {
   const navigate = useNavigate();
@@ -44,30 +53,20 @@ const ScanLabel = () => {
       status: 'safe' | 'unsafe' | 'caution' | 'unknown';
     }>
   >([]);
-  const { ingredients: dbIngredients } = useIngredients();
+  const dbIngredients = useIngredients();
   const [isSaving, setIsSaving] = useState(false);
-  const [worker, setWorker] = useState<Tesseract.Worker | null>(null);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      // Cleanup Tesseract worker if active
-      if (worker) {
-        worker.terminate();
-      }
-    };
-  }, [worker]);
 
   const processImage = async (imageData: string | File) => {
     setIsProcessing(true);
-    const newWorker = await createWorker('eng');
-    setWorker(newWorker);
 
     try {
-      const result = await newWorker.recognize(imageData);
-      const text = result.data.text;
-      const ingredientsMatch = text.match(/ingredients:?(.*?)(\.|\n|$)/i);
-      const ingredients = ingredientsMatch ? ingredientsMatch[1].trim() : text;
+      const result = await ocrService.extractText(imageData);
+      const ingredientsMatch = result.text.match(
+        /ingredients:?(.*?)(\.|\n|$)/i
+      );
+      const ingredients = ingredientsMatch
+        ? ingredientsMatch[1].trim()
+        : result.text;
 
       setExtractedText(ingredients);
     } catch (error) {
@@ -75,9 +74,6 @@ const ScanLabel = () => {
       toast.error('Failed to process image. Please try again.');
     } finally {
       setIsProcessing(false);
-      // Cleanup worker after processing
-      await newWorker.terminate();
-      setWorker(null);
     }
   };
 
@@ -103,7 +99,7 @@ const ScanLabel = () => {
   const analyzeIngredients = useCallback(
     (ingredientList: string[]) => {
       const analyzed = ingredientList.map((ingredient) => {
-        const match = dbIngredients.find(
+        const match = (dbIngredients as Ingredient[]).find(
           (dbIng) =>
             dbIng.name.toLowerCase() === ingredient.toLowerCase() ||
             dbIng.aliases?.some(
@@ -489,10 +485,7 @@ const ScanLabel = () => {
           {renderStepIndicator()}
           <Card className="p-6 bg-white/80 backdrop-blur-sm">
             {isProcessing ? (
-              <div className="flex flex-col items-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-pastel-blue" />
-                <p className="mt-4 text-gray-600">Processing image...</p>
-              </div>
+              <Loading messages={ocrLoadingMessages} />
             ) : (
               renderStep()
             )}
