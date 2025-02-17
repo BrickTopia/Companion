@@ -6,18 +6,15 @@ import {
   saveFavorite,
   removeFavorite,
   getFavorites,
-  getIngredients,
 } from '@/utils/indexedDB';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
 import { IngredientDetail } from './IngredientDetail';
 import { IngredientSearch } from './IngredientSearch';
 import { IngredientCard } from './IngredientCard';
-import { IngredientSkeleton } from './IngredientSkeleton';
 import type { Ingredient } from '@/types/ingredients';
 import { FilterSort } from './FilterSort';
 import type { IngredientStatus } from '@/types/ingredients';
-import { createResource } from '@/utils/suspense';
 import { useIngredients } from '@/services/ingredientService';
 
 interface IngredientListProps {
