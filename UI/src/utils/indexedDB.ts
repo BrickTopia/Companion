@@ -1,7 +1,10 @@
 import type { Ingredient } from '@/types/ingredients';
+import type { ScannedLabel } from '@/types/scannedLabel';
 
 const DB_NAME = 'celiacSafeDB';
 const DB_VERSION = 2;
+const SCANNED_LABELS_STORE = 'scannedLabels';
+const PENDING_SAVES_STORE = 'pendingSaves';
 
 export const initDB = (): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -28,6 +31,20 @@ export const initDB = (): Promise<void> => {
         const ingredientStore = db.createObjectStore('ingredients', { keyPath: 'id' });
         ingredientStore.createIndex('lastUpdated', 'lastUpdated');
         ingredientStore.createIndex('status', 'status');
+      }
+
+      if (!db.objectStoreNames.contains(SCANNED_LABELS_STORE)) {
+        db.createObjectStore(SCANNED_LABELS_STORE, {
+          keyPath: 'id',
+          autoIncrement: false,
+        });
+      }
+
+      if (!db.objectStoreNames.contains(PENDING_SAVES_STORE)) {
+        db.createObjectStore(PENDING_SAVES_STORE, {
+          keyPath: 'id',
+          autoIncrement: false,
+        });
       }
     };
   });
@@ -188,4 +205,54 @@ export const getIngredients = async (forceSync = false): Promise<Ingredient[]> =
     
     request.onerror = () => reject(new Error('Failed to get ingredients from IndexedDB'));
   });
+};
+
+export const saveScannedLabel = async (label: ScannedLabel): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction(SCANNED_LABELS_STORE, 'readwrite');
+  const store = transaction.objectStore(SCANNED_LABELS_STORE);
+  
+  return new Promise((resolve, reject) => {
+    const request = store.put(label);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(new Error('Failed to save label'));
+  });
+};
+
+export const getScannedLabels = async (): Promise<ScannedLabel[]> => {
+  const db = await openDB();
+  const transaction = db.transaction(SCANNED_LABELS_STORE, 'readonly');
+  const store = transaction.objectStore(SCANNED_LABELS_STORE);
+  
+  return new Promise((resolve, reject) => {
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(new Error('Failed to get scanned labels'));
+  });
+};
+
+export const savePendingLabel = async (label: ScannedLabel): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction(PENDING_SAVES_STORE, 'readwrite');
+  const store = transaction.objectStore(PENDING_SAVES_STORE);
+  await store.put({ ...label, timestamp: Date.now() });
+};
+
+export const recoverPendingSaves = async (): Promise<ScannedLabel[]> => {
+  const db = await openDB();
+  const transaction = db.transaction(PENDING_SAVES_STORE, 'readonly');
+  const store = transaction.objectStore(PENDING_SAVES_STORE);
+  
+  return new Promise((resolve, reject) => {
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(new Error('Failed to get pending saves'));
+  });
+};
+
+export const clearPendingSave = async (id: string): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction(PENDING_SAVES_STORE, 'readwrite');
+  const store = transaction.objectStore(PENDING_SAVES_STORE);
+  await store.delete(id);
 };

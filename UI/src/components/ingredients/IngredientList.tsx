@@ -33,26 +33,29 @@ const mockIngredients: Ingredient[] = [
     tags: ['staple', 'gluten-free'],
     lastUpdated: '2024-03-15',
     scientificName: 'Oryza sativa',
+    alternateNames: [],
   },
   {
     id: '2',
     name: 'Barley',
-    status: 'risk',
+    status: 'unsafe',
     description: 'Contains gluten, unsafe for celiac consumption.',
     category: 'grain',
     tags: ['contains-gluten'],
     lastUpdated: '2024-03-15',
     scientificName: 'Hordeum vulgare',
+    alternateNames: [],
   },
   {
     id: '3',
     name: 'Oats',
-    status: 'risky',
+    status: 'caution',
     description: 'May be contaminated with gluten during processing.',
     category: 'grain',
     tags: ['cross-contamination'],
     lastUpdated: '2024-03-15',
     scientificName: 'Avena sativa',
+    alternateNames: [],
   },
   {
     id: '4',
@@ -63,6 +66,7 @@ const mockIngredients: Ingredient[] = [
     tags: ['ancient-grain', 'gluten-free'],
     lastUpdated: '2024-03-15',
     scientificName: 'Chenopodium quinoa',
+    alternateNames: [],
   },
   {
     id: '5',
@@ -72,6 +76,7 @@ const mockIngredients: Ingredient[] = [
     category: 'additive',
     tags: ['additive', 'processed'],
     lastUpdated: '2024-03-15',
+    alternateNames: [],
   },
 ];
 

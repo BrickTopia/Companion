@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import Loading from './components/Loading';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
+import ScanLabel from './pages/ScanLabel';
 import './App.css';
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/" element={<Index />} />
-            {/* Add any other specific routes here */}
+            <Route path="/scan" element={<ScanLabel />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
