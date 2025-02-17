@@ -1,12 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  initDB,
-  saveFavorite,
-  removeFavorite,
-  getFavorites,
-} from '@/utils/indexedDB';
+import { saveFavorite, removeFavorite, getFavorites } from '@/utils/indexedDB';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
 import { IngredientDetail } from './IngredientDetail';
@@ -104,18 +99,17 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
   }, [searchTerm]);
 
   useEffect(() => {
-    const initialize = async () => {
+    const loadFavorites = async () => {
       try {
-        await initDB();
         const savedFavorites = await getFavorites();
         setFavorites(savedFavorites);
       } catch (err) {
         setError('Failed to load favorites. Please refresh the page.');
-        console.error('Error initializing:', err);
+        console.error('Error loading favorites:', err);
       }
     };
 
-    initialize();
+    loadFavorites();
   }, []);
 
   const toggleFavorite = useCallback(
@@ -149,22 +143,31 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
 
   const filteredIngredients = useMemo(() => {
     return ingredients
-      .filter((ingredient) => {
+      .filter((ingredient): ingredient is Ingredient => {
+        // Type guard to ensure ingredient is valid
+        if (!ingredient || typeof ingredient !== 'object') return false;
+
         const matchesSearch =
           !debouncedSearch ||
-          ingredient.name.toLowerCase().includes(debouncedSearch.toLowerCase());
+          (ingredient.name
+            ?.toLowerCase()
+            ?.includes(debouncedSearch.toLowerCase()) ??
+            false);
         const matchesFavorites =
-          !showOnlyFavoritesState || favorites.includes(ingredient.id);
+          !showOnlyFavoritesState || favorites.includes(ingredient.id ?? '');
         const matchesStatus =
           selectedStatus === 'all' || ingredient.status === selectedStatus;
         return matchesSearch && matchesFavorites && matchesStatus;
       })
       .sort((a, b) => {
         if (sortOrder === 'name') {
-          return a.name.localeCompare(b.name);
+          return (a.name ?? '').localeCompare(b.name ?? '');
         } else {
           const statusPriority = { safe: 0, risky: 1, unknown: 2, risk: 3 };
-          return statusPriority[a.status] - statusPriority[b.status];
+          return (
+            (statusPriority[a.status ?? 'unknown'] ?? 2) -
+            (statusPriority[b.status ?? 'unknown'] ?? 2)
+          );
         }
       });
   }, [

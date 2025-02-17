@@ -7,8 +7,26 @@ import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import ScanLabel from './pages/ScanLabel';
 import './App.css';
+import { useIndexedDB } from '@/hooks/useIndexedDB';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 function App() {
+  const { error } = useIndexedDB();
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Database Error</AlertTitle>
+        <AlertDescription>
+          Failed to initialize the application. Please refresh the page or check
+          your browser settings.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <ErrorBoundary>
       <BrowserRouter>

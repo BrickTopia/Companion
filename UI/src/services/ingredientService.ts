@@ -1,6 +1,8 @@
 import { getIngredients as getIngredientsFromDB, cacheIngredients } from '@/utils/indexedDB';
 import { createResource } from '@/utils/suspense';
 import type { Ingredient } from '@/types/ingredients';
+import { mapIngredientDTO } from '@/types/ingredientDTO';
+import type { IngredientDTO } from '@/types/ingredientDTO';
 
 const API_URL = 'https://api.sheety.co/e05b4640b9ab192354f836e9a1b60432/ingredients/ingredientsList';
 
@@ -18,15 +20,19 @@ const fetchAndCacheIngredients = async (): Promise<Ingredient[]> => {
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('Network response was not ok');
         const freshIngredients = await response.json();
-        
+        const ingredientsList = freshIngredients.ingredientsList;
+        console.log('ingredientsList', ingredientsList);
         // Ensure we have an array and validate the data
-        if (!Array.isArray(freshIngredients)) {
+        if (!Array.isArray(ingredientsList)) {
           throw new Error('Invalid data format from API');
         }
         
-        // Cache the fresh data
-        await cacheIngredients(freshIngredients);
-        return freshIngredients;
+        // Map the API response using our DTO mapper
+        const mappedIngredients = ingredientsList.map((item: IngredientDTO) => mapIngredientDTO(item));
+        
+        // Cache the mapped ingredients
+        await cacheIngredients(mappedIngredients);
+        return mappedIngredients;
       } catch (error) {
         console.warn('Failed to fetch fresh ingredients:', error);
         // If we have cached data, use it as fallback

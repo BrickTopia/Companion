@@ -2,38 +2,69 @@ import type { Ingredient } from '@/types/ingredients';
 import type { ScannedLabel } from '@/types/scannedLabel';
 
 const DB_NAME = 'celiacSafeDB';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const SCANNED_LABELS_STORE = 'scannedLabels';
 const PENDING_SAVES_STORE = 'pendingSaves';
 
-export const initDB = (): Promise<void> => {
+let dbInstance: IDBDatabase | null = null;
+
+const openDB = async (): Promise<IDBDatabase> => {
+  // Return existing connection if available
+  if (dbInstance) {
+    return dbInstance;
+  }
+
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
+      console.warn('Failed to open database:', request.error);
       reject(new Error('Failed to open database'));
     };
 
     request.onsuccess = () => {
-      resolve();
+      dbInstance = request.result;
+      
+      // Handle connection closing
+      dbInstance.onclose = () => {
+        dbInstance = null;
+      };
+
+      // Verify all required stores exist
+      const storeNames = ['ingredients', 'favorites', SCANNED_LABELS_STORE, PENDING_SAVES_STORE];
+      const missingStores = storeNames.filter(store => !dbInstance?.objectStoreNames.contains(store));
+      
+      if (missingStores.length > 0) {
+        console.warn('Missing stores detected:', missingStores);
+        // Force a version upgrade by closing and reopening with incremented version
+        dbInstance.close();
+        dbInstance = null;
+        // Recursive call to try again
+        resolve(openDB());
+        return;
+      }
+      
+      resolve(dbInstance);
     };
 
     request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
       const db = (event.target as IDBOpenDBRequest).result;
       
-      // Favorites store
+      // Create stores if they don't exist
       if (!db.objectStoreNames.contains('favorites')) {
+        console.log('Creating favorites store');
         db.createObjectStore('favorites', { keyPath: 'id' });
       }
 
-      // Ingredients store with indexes
       if (!db.objectStoreNames.contains('ingredients')) {
+        console.log('Creating ingredients store');
         const ingredientStore = db.createObjectStore('ingredients', { keyPath: 'id' });
         ingredientStore.createIndex('lastUpdated', 'lastUpdated');
         ingredientStore.createIndex('status', 'status');
       }
 
       if (!db.objectStoreNames.contains(SCANNED_LABELS_STORE)) {
+        console.log('Creating scanned labels store');
         db.createObjectStore(SCANNED_LABELS_STORE, {
           keyPath: 'id',
           autoIncrement: false,
@@ -41,6 +72,7 @@ export const initDB = (): Promise<void> => {
       }
 
       if (!db.objectStoreNames.contains(PENDING_SAVES_STORE)) {
+        console.log('Creating pending saves store');
         db.createObjectStore(PENDING_SAVES_STORE, {
           keyPath: 'id',
           autoIncrement: false,
@@ -51,81 +83,98 @@ export const initDB = (): Promise<void> => {
 };
 
 export const saveFavorite = async (ingredientId: string): Promise<void> => {
-  const db = await openDB();
-  const transaction = db.transaction('favorites', 'readwrite');
-  const store = transaction.objectStore('favorites');
-  
-  return new Promise((resolve, reject) => {
-    const request = store.put({ id: ingredientId, timestamp: Date.now() });
+  try {
+    const db = await openDB();
+    const transaction = db.transaction('favorites', 'readwrite');
+    const store = transaction.objectStore('favorites');
     
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(new Error('Failed to save favorite'));
-  });
+    return new Promise((resolve) => {
+      const request = store.put({ id: ingredientId, timestamp: Date.now() });
+      request.onsuccess = () => resolve();
+      request.onerror = () => {
+        console.warn('Failed to save favorite');
+        resolve();
+      };
+    });
+  } catch (error) {
+    console.warn('Error in saveFavorite:', error);
+  }
 };
 
 export const removeFavorite = async (ingredientId: string): Promise<void> => {
-  const db = await openDB();
-  const transaction = db.transaction('favorites', 'readwrite');
-  const store = transaction.objectStore('favorites');
-  
-  return new Promise((resolve, reject) => {
-    const request = store.delete(ingredientId);
+  try {
+    const db = await openDB();
+    const transaction = db.transaction('favorites', 'readwrite');
+    const store = transaction.objectStore('favorites');
     
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(new Error('Failed to remove favorite'));
-  });
+    return new Promise((resolve) => {
+      const request = store.delete(ingredientId);
+      request.onsuccess = () => resolve();
+      request.onerror = () => {
+        console.warn('Failed to remove favorite');
+        resolve();
+      };
+    });
+  } catch (error) {
+    console.warn('Error in removeFavorite:', error);
+  }
 };
 
 export const getFavorites = async (): Promise<string[]> => {
-  const db = await openDB();
-  const transaction = db.transaction('favorites', 'readonly');
-  const store = transaction.objectStore('favorites');
-  
-  return new Promise((resolve, reject) => {
-    const request = store.getAll();
+  try {
+    const db = await openDB();
     
-    request.onsuccess = () => {
-      const favorites = request.result;
-      const syncEnabled = localStorage.getItem("syncEnabled") === "true";
-      const cachePolicy = localStorage.getItem("cachePolicy") || "normal";
+    // Verify store exists before attempting transaction
+    if (!db.objectStoreNames.contains('favorites')) {
+      console.warn('Favorites store not found, returning empty array');
+      return [];
+    }
+    
+    const transaction = db.transaction('favorites', 'readonly');
+    const store = transaction.objectStore('favorites');
+    
+    return new Promise((resolve) => {
+      const request = store.getAll();
       
-      if (syncEnabled) {
-        // Apply cache policy
-        const now = Date.now();
-        let cacheDuration: number;
+      request.onsuccess = () => {
+        const favorites = request.result || [];
+        const syncEnabled = localStorage.getItem("syncEnabled") === "true";
+        const cachePolicy = localStorage.getItem("cachePolicy") || "normal";
+        
+        if (syncEnabled) {
+          const now = Date.now();
+          let cacheDuration: number;
 
-        if (cachePolicy === "custom") {
-          const customDays = parseInt(localStorage.getItem("customCacheDuration") || "30");
-          cacheDuration = customDays * 24 * 60 * 60 * 1000;
+          if (cachePolicy === "custom") {
+            const customDays = parseInt(localStorage.getItem("customCacheDuration") || "30");
+            cacheDuration = customDays * 24 * 60 * 60 * 1000;
+          } else {
+            cacheDuration = {
+              minimal: 7 * 24 * 60 * 60 * 1000,
+              normal: 30 * 24 * 60 * 60 * 1000,
+              aggressive: 90 * 24 * 60 * 60 * 1000
+            }[cachePolicy];
+          }
+
+          const validFavorites = favorites.filter(fav => {
+            const age = now - (fav?.timestamp || 0);
+            return age < cacheDuration;
+          });
+
+          resolve(validFavorites.map(item => item?.id || '').filter(Boolean));
         } else {
-          cacheDuration = {
-            minimal: 7 * 24 * 60 * 60 * 1000, // 7 days
-            normal: 30 * 24 * 60 * 60 * 1000, // 30 days
-            aggressive: 90 * 24 * 60 * 60 * 1000 // 90 days
-          }[cachePolicy];
+          resolve(favorites.map(item => item?.id || '').filter(Boolean));
         }
-
-        const validFavorites = favorites.filter(fav => {
-          const age = now - fav.timestamp;
-          return age < cacheDuration;
-        });
-
-        resolve(validFavorites.map(item => item.id));
-      } else {
-        resolve(favorites.map(item => item.id));
-      }
-    };
-    request.onerror = () => reject(new Error('Failed to get favorites'));
-  });
-};
-
-const openDB = (): Promise<IDBDatabase> => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(new Error('Failed to open database'));
-  });
+      };
+      request.onerror = () => {
+        console.warn('Failed to get favorites, returning empty array');
+        resolve([]);
+      };
+    });
+  } catch (error) {
+    console.warn('Error in getFavorites:', error);
+    return [];
+  }
 };
 
 let syncInterval: number | null = null;
@@ -161,50 +210,94 @@ export const initSync = () => {
 
 // New function to cache ingredients from API
 export const cacheIngredients = async (ingredients: Ingredient[]): Promise<void> => {
-  if (!ingredients?.length) {
-    console.warn('No ingredients to cache');
-    return;
-  }
+  if (!ingredients?.length) return;
 
   try {
     const db = await openDB();
+    
+    // Verify store exists before attempting transaction
+    if (!db.objectStoreNames.contains('ingredients')) {
+      throw new Error('Ingredients store not found');
+    }
+    
     const transaction = db.transaction('ingredients', 'readwrite');
     const store = transaction.objectStore('ingredients');
     
-    await Promise.all(
-      ingredients.map(ingredient => 
-        new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
+      transaction.onerror = () => {
+        console.error('Transaction error:', transaction.error);
+        reject(transaction.error);
+      };
+
+      // Clear existing data first
+      const clearRequest = store.clear();
+      clearRequest.onsuccess = () => {
+        let completed = 0;
+        const errors: Error[] = [];
+
+        ingredients.forEach(ingredient => {
           const request = store.put({
             ...ingredient,
             lastSynced: Date.now()
           });
-          request.onsuccess = () => resolve();
-          request.onerror = () => reject(new Error(`Failed to cache ingredient: ${ingredient.id}`));
-        })
-      )
-    );
+          
+          request.onsuccess = () => {
+            completed++;
+            if (completed === ingredients.length) {
+              if (errors.length > 0) {
+                reject(new Error(`Failed to cache ${errors.length} ingredients`));
+              } else {
+                resolve();
+              }
+            }
+          };
+          
+          request.onerror = () => {
+            console.warn(`Failed to cache ingredient: ${ingredient.id}`, request.error);
+            errors.push(request.error || new Error(`Failed to cache ingredient: ${ingredient.id}`));
+            completed++;
+            if (completed === ingredients.length) {
+              reject(new Error(`Failed to cache ${errors.length} ingredients`));
+            }
+          };
+        });
+      };
+      
+      clearRequest.onerror = () => {
+        console.error('Failed to clear existing ingredients:', clearRequest.error);
+        reject(new Error('Failed to clear existing ingredients'));
+      };
+    });
   } catch (error) {
     console.error('Error caching ingredients:', error);
-    throw error;
+    throw error; // Re-throw to handle in calling code
   }
 };
 
 // Get ingredients with optional sync check
 export const getIngredients = async (forceSync = false): Promise<Ingredient[]> => {
-  const db = await openDB();
-  const transaction = db.transaction('ingredients', 'readonly');
-  const store = transaction.objectStore('ingredients');
-  
-  return new Promise((resolve, reject) => {
-    const request = store.getAll();
+  try {
+    const db = await openDB();
+    const transaction = db.transaction('ingredients', 'readonly');
+    const store = transaction.objectStore('ingredients');
     
-    request.onsuccess = () => {
-      const ingredients = request.result;
-      resolve(ingredients);
-    };
-    
-    request.onerror = () => reject(new Error('Failed to get ingredients from IndexedDB'));
-  });
+    return new Promise((resolve) => {
+      const request = store.getAll();
+      
+      request.onsuccess = () => {
+        const ingredients = request.result || [];
+        resolve(ingredients);
+      };
+      
+      request.onerror = () => {
+        console.warn('Failed to get ingredients from IndexedDB');
+        resolve([]);
+      };
+    });
+  } catch (error) {
+    console.warn('Error getting ingredients:', error);
+    return [];
+  }
 };
 
 export const saveScannedLabel = async (label: ScannedLabel): Promise<void> => {
@@ -256,3 +349,6 @@ export const clearPendingSave = async (id: string): Promise<void> => {
   const store = transaction.objectStore(PENDING_SAVES_STORE);
   await store.delete(id);
 };
+
+// Make openDB available for export
+export { openDB };
