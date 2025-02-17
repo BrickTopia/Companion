@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toaster } from '@/components/ui/sonner';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import Loading from './components/Loading';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
@@ -10,9 +10,16 @@ import './App.css';
 import { useIndexedDB } from '@/hooks/useIndexedDB';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { initializeIngredientMatchers } from '@/utils/textProcessing';
+import { useIngredients } from '@/services/ingredientService';
 
 function App() {
   const { error } = useIndexedDB();
+  const ingredients = useIngredients();
+
+  useEffect(() => {
+    initializeIngredientMatchers(ingredients);
+  }, [ingredients]);
 
   if (error) {
     return (

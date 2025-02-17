@@ -62,6 +62,10 @@ export async function refreshIngredients() {
   return ingredientsResource.read();
 }
 
+export async function getIngredients(): Promise<Ingredient[]> {
+  return await fetchAndCacheIngredients();
+}
+
 interface PeriodicSyncRegistration extends ServiceWorkerRegistration {
   periodicSync: {
     register(tag: string, options: { minInterval: number }): Promise<void>;
