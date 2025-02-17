@@ -1,27 +1,41 @@
+import { Card } from '@/components/ui/card';
+import { Search, Info, Settings } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import IngredientList from '@/components/ingredients/IngredientList';
+import { SettingsPanel } from '@/components/settings/SettingsPanel';
 
-import { Card } from "@/components/ui/card";
-import { Search, Info, Settings } from "lucide-react";
-import { useState } from "react";
-import IngredientList from "@/components/ingredients/IngredientList";
-import { SettingsPanel } from "@/components/settings/SettingsPanel";
+// Create a promise outside the component
+let loadingPromise: Promise<void> | null = new Promise((resolve) => {
+  setTimeout(() => {
+    resolve();
+    loadingPromise = null;
+  }, 10000);
+});
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState("ingredients");
+  const [activeTab, setActiveTab] = useState('ingredients');
+
+  // Throw the promise if it exists
+  if (loadingPromise) {
+    throw loadingPromise;
+  }
 
   const renderContent = () => {
     switch (activeTab) {
-      case "ingredients":
+      case 'ingredients':
         return <IngredientList />;
-      case "info":
+      case 'info':
         return (
           <Card className="bg-white/50 backdrop-blur-sm shadow-sm p-4">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Information</h2>
+            <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              Information
+            </h2>
             <p className="text-gray-600">
               Learn about celiac safety and how to use this app effectively.
             </p>
           </Card>
         );
-      case "settings":
+      case 'settings':
         return <SettingsPanel />;
       default:
         return null;
@@ -47,33 +61,33 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-around py-2">
             <button
-              onClick={() => setActiveTab("ingredients")}
+              onClick={() => setActiveTab('ingredients')}
               className={`p-2 rounded-lg flex flex-col items-center transition-colors ${
-                activeTab === "ingredients" 
-                  ? "bg-pastel-blue/20 text-gray-800 shadow-sm" 
-                  : "text-gray-600 hover:bg-pastel-blue/10"
+                activeTab === 'ingredients'
+                  ? 'bg-pastel-blue/20 text-gray-800 shadow-sm'
+                  : 'text-gray-600 hover:bg-pastel-blue/10'
               }`}
             >
               <Search size={24} />
               <span className="text-xs mt-1">Search</span>
             </button>
             <button
-              onClick={() => setActiveTab("info")}
+              onClick={() => setActiveTab('info')}
               className={`p-2 rounded-lg flex flex-col items-center transition-colors ${
-                activeTab === "info" 
-                  ? "bg-pastel-blue/20 text-gray-800 shadow-sm" 
-                  : "text-gray-600 hover:bg-pastel-blue/10"
+                activeTab === 'info'
+                  ? 'bg-pastel-blue/20 text-gray-800 shadow-sm'
+                  : 'text-gray-600 hover:bg-pastel-blue/10'
               }`}
             >
               <Info size={24} />
               <span className="text-xs mt-1">Info</span>
             </button>
             <button
-              onClick={() => setActiveTab("settings")}
+              onClick={() => setActiveTab('settings')}
               className={`p-2 rounded-lg flex flex-col items-center transition-colors ${
-                activeTab === "settings" 
-                  ? "bg-pastel-blue/20 text-gray-800 shadow-sm" 
-                  : "text-gray-600 hover:bg-pastel-blue/10"
+                activeTab === 'settings'
+                  ? 'bg-pastel-blue/20 text-gray-800 shadow-sm'
+                  : 'text-gray-600 hover:bg-pastel-blue/10'
               }`}
             >
               <Settings size={24} />
