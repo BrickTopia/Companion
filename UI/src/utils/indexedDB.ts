@@ -144,22 +144,32 @@ export const initSync = () => {
 
 // New function to cache ingredients from API
 export const cacheIngredients = async (ingredients: Ingredient[]): Promise<void> => {
-  const db = await openDB();
-  const transaction = db.transaction('ingredients', 'readwrite');
-  const store = transaction.objectStore('ingredients');
-  
-  return Promise.all(
-    ingredients.map(ingredient => 
-      new Promise<void>((resolve, reject) => {
-        const request = store.put({
-          ...ingredient,
-          lastSynced: Date.now()
-        });
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject();
-      })
-    )
-  ).then(() => undefined);
+  if (!ingredients?.length) {
+    console.warn('No ingredients to cache');
+    return;
+  }
+
+  try {
+    const db = await openDB();
+    const transaction = db.transaction('ingredients', 'readwrite');
+    const store = transaction.objectStore('ingredients');
+    
+    await Promise.all(
+      ingredients.map(ingredient => 
+        new Promise<void>((resolve, reject) => {
+          const request = store.put({
+            ...ingredient,
+            lastSynced: Date.now()
+          });
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(new Error(`Failed to cache ingredient: ${ingredient.id}`));
+        })
+      )
+    );
+  } catch (error) {
+    console.error('Error caching ingredients:', error);
+    throw error;
+  }
 };
 
 // Get ingredients with optional sync check
@@ -171,33 +181,11 @@ export const getIngredients = async (forceSync = false): Promise<Ingredient[]> =
   return new Promise((resolve, reject) => {
     const request = store.getAll();
     
-    request.onsuccess = async () => {
-      const cachedIngredients = request.result;
-      
-      // Check if we need to sync with remote
-      const lastSync = localStorage.getItem('lastSync');
-      const syncInterval = parseInt(localStorage.getItem('syncInterval') || '15'); // minutes
-      const needsSync = forceSync || 
-        !lastSync || 
-        Date.now() - parseInt(lastSync) > syncInterval * 60 * 1000;
-
-      if (needsSync) {
-        try {
-          // TODO: Implement API fetch when ready
-          // const remoteIngredients = await fetchIngredientsFromAPI();
-          // await cacheIngredients(remoteIngredients);
-          // localStorage.setItem('lastSync', Date.now().toString());
-          // resolve(remoteIngredients);
-          resolve(cachedIngredients);
-        } catch (error) {
-          console.warn('Failed to sync with remote, using cached data:', error);
-          resolve(cachedIngredients);
-        }
-      } else {
-        resolve(cachedIngredients);
-      }
+    request.onsuccess = () => {
+      const ingredients = request.result;
+      resolve(ingredients);
     };
     
-    request.onerror = () => reject(new Error('Failed to get ingredients'));
+    request.onerror = () => reject(new Error('Failed to get ingredients from IndexedDB'));
   });
 };
