@@ -1,71 +1,44 @@
-import { createWorker, PSM, OEM, Worker } from 'tesseract.js';
+import { createWorker, PSM } from 'tesseract.js';
+import type { Worker } from 'tesseract.js';
+import { isOpenCVReady, waitForOpenCV } from '@/utils/opencv';
+import { loadImage } from '@/utils/imageProcessing';
+import cv from '@techstark/opencv-js';
 import { ocr as webAiOcr } from 'web-ai-toolkit';
-import { preprocessImage, parseIngredients } from '@/utils';
+import { preprocessImage, parseIngredients, basicPreprocess } from '@/utils';
 
 export type OcrProvider = 'tesseract' | 'web-ai-toolkit';
 
-interface OcrResult {
+export interface TextRegion {
   text: string;
+  confidence: number;
+  bbox: {
+    x0: number;
+    y0: number;
+    x1: number;
+    y1: number;
+  };
+}
+
+export interface OcrResult {
+  regions: TextRegion[];
+  ingredients?: TextRegion; // The identified ingredients region
+  rawText: string;
   confidence: number;
 }
 
-// Define available OCR model configurations
-const OCR_MODELS = {
-  basic: {
-    name: 'basic',
-    config: {
-      tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
-      tessedit_char_whitelist: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%,.()[]-/ ',
-      tessedit_write_images: '0',
-      tessedit_create_boxfile: '0',
-      tessedit_create_hocr: '0',
-      tessedit_create_tsv: '0',
-      tessedit_create_txt: '0',
-    },
-    preprocess: false
-  },
-  enhanced: {
-    name: 'enhanced',
-    config: {
-      tessedit_pageseg_mode: PSM.SINGLE_COLUMN,
-      tessedit_char_whitelist: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%,.()[]-/ ',
-      preserve_interword_spaces: '1',
-      textord_heavy_nr: '1',
-      textord_force_make_prop_words: '1',
-      tessedit_write_images: '0',
-      tessedit_create_boxfile: '0',
-      tessedit_create_hocr: '0',
-      tessedit_create_tsv: '0',
-      tessedit_create_txt: '0',
-      textord_tabfind_vertical_text: '1',
-      textord_tabfind_force_vertical_text: '0',
-      textord_single_column: '0',
-      textord_min_linesize: '1.5',
-    },
-    preprocess: true
-  },
-  ingredients: {
-    name: 'ingredients',
-    config: {
-      tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
-      tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%,.()[]-/& ',
-      tessedit_upper_case_only: '0',
-      preserve_interword_spaces: '1',
-      textord_heavy_nr: '1',
-      tessedit_fix_hyphens: '1',
-      tessedit_enable_dict_correction: '1',
-      textord_force_make_prop_words: '1',
-      textord_min_linesize: '1.2',
-    },
-    preprocess: true
-  }
+const OCR_CONFIG = {
+  tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
+  tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.()-/ ',
+  preserve_interword_spaces: '1',
+  tessedit_enable_dict_correction: '0',
+  textord_min_linesize: '1.2',
+  tessedit_write_images: '0',
+  tessedit_create_hocr: '1'
 };
 
 export class OcrService {
   private static instance: OcrService;
-  private provider: OcrProvider = 'tesseract';
   private worker: Worker | null = null;
-  private activeModels: string[] = ['enhanced']; // Default to enhanced model
 
   private constructor() {}
 
@@ -74,20 +47,6 @@ export class OcrService {
       this.instance = new OcrService();
     }
     return this.instance;
-  }
-
-  setProvider(provider: OcrProvider) {
-    this.provider = provider;
-  }
-
-  setActiveModels(modelNames: string[]) {
-    const validModels = modelNames.filter(name => name in OCR_MODELS);
-    if (validModels.length === 0) {
-      console.warn('No valid models specified, using enhanced model');
-      this.activeModels = ['enhanced'];
-    } else {
-      this.activeModels = validModels;
-    }
   }
 
   private async initializeWorker() {
@@ -115,159 +74,152 @@ export class OcrService {
     }
   }
 
-  private async runModel(imageData: string | File | Blob, modelName: string): Promise<OcrResult> {
-    const worker = await this.initializeWorker();
-    const model = OCR_MODELS[modelName as keyof typeof OCR_MODELS];
-
-    try {
-      await worker.setParameters(model.config);
-
-      // Apply preprocessing if model requires it
-      const dataToProcess = model.preprocess 
-        ? await this.preprocessImage(imageData)
-        : imageData;
-
-      const result = await worker.recognize(dataToProcess);
-      
-      return {
-        text: this.cleanText(result.data.text),
-        confidence: result.data.confidence
-      };
-    } catch (error) {
-      console.error(`Error running model ${modelName}:`, error);
-      // Fallback to basic model if enhanced fails
-      if (modelName === 'enhanced') {
-        console.log('Falling back to basic model...');
-        return this.runModel(imageData, 'basic');
-      }
-      throw error;
-    }
-  }
-
-  private cleanText(text: string): string {
-    return parseIngredients(text).join(', ');
-  }
-
   async extractText(imageData: string | File | Blob): Promise<OcrResult> {
     try {
       console.log('Starting OCR extraction...');
-      
-      if (!imageData) {
-        throw new Error('No image data provided');
-      }
-
-      const worker = await this.initializeWorker();
-      if (!worker) {
-        throw new Error('Failed to initialize Tesseract worker');
-      }
-
-      try {
-        // Convert image to proper format for Tesseract
-        let imageToProcess: string | Blob;
-        
-        if (typeof imageData === 'string') {
-          imageToProcess = imageData;
-        } else {
-          const buffer = await imageData.arrayBuffer();
-          const bytes = new Uint8Array(buffer);
-          const blob = new Blob([bytes], { type: 'image/png' });
-          imageToProcess = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.readAsDataURL(blob);
-          });
-        }
-
-        console.log('Preprocessing image...');
-        const processedImage = await preprocessImage(imageToProcess);
-        if (!processedImage) {
-          throw new Error('Image preprocessing failed');
-        }
-
-        // Convert ImageData back to base64
-        const canvas = document.createElement('canvas');
-        canvas.width = processedImage.width;
-        canvas.height = processedImage.height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          throw new Error('Failed to get canvas context');
-        }
-        ctx.putImageData(processedImage, 0, 0);
-        const processedBase64 = canvas.toDataURL('image/png');
-
-        // Optimized configuration for ingredient lists
-        const config = {
-          tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
-          preserve_interword_spaces: '1',
-          tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,.()•*-/ ',
-          tessedit_enable_dict_correction: '0',  // Disable dictionary to preserve ingredient terms
-          textord_heavy_nr: '1',
-          textord_min_linesize: '1.2',
-          language_model_penalty_non_dict_word: '0.5',  // Reduce penalty for non-dictionary words
-          language_model_penalty_non_freq_dict_word: '0.5',
-          textord_force_make_prop_words: '0',  // Don't force proportional words
-          tessedit_write_images: '0',
-          tessedit_create_boxfile: '0',
-          tessedit_create_hocr: '0',
-          tessedit_create_tsv: '0',
-          tessedit_create_txt: '0'
-        };
-
-        console.log('Configuring OCR model...');
-        await worker.setParameters(config);
-        
-        console.log('Performing OCR...');
-        const result = await worker.recognize(processedBase64);
-        
-        if (!result?.data) {
-          throw new Error('OCR recognition failed');
-        }
-
-        console.log('OCR complete, confidence:', result.data.confidence);
-        
-        // Basic text cleaning for ingredients
-        const cleanedText = result.data.text
-          .replace(/\s+/g, ' ')  // Normalize spaces
-          .replace(/[•*]/g, '•')  // Normalize bullets
-          .replace(/\s*[•]\s*/g, ', ')  // Convert bullets to commas
-          .replace(/,,+/g, ',')  // Remove multiple commas
-          .replace(/,\s*,/g, ',')  // Clean up spaces around commas
-          .trim();
-        
-        console.log('Cleaned text:', cleanedText);
-        
-        return {
-          text: cleanedText,
-          confidence: result.data.confidence
-        };
-
-      } catch (ocrError) {
-        const error = ocrError instanceof Error ? ocrError : new Error('OCR processing failed');
-        console.error('OCR processing failed:', {
-          stage: error.message,
-          details: ocrError
-        });
-        throw error;
-      }
-
+      return this.detectRegions(imageData);
     } catch (error) {
-      const typedError = error instanceof Error ? error : new Error('Unknown OCR error');
-      console.error('OCR extraction failed:', {
-        errorType: typedError.constructor.name,
-        message: typedError.message,
-        stack: typedError.stack
-      });
-      throw typedError;
-    } finally {
-      await this.cleanup();
+      console.error('OCR extraction failed:', error);
+      throw error;
     }
   }
 
   async cleanup() {
     if (this.worker) {
-      await this.worker.terminate();
-      this.worker = null;
+      try {
+        await this.worker.terminate();
+      } catch (error) {
+        console.error('Error terminating worker:', error);
+      } finally {
+        this.worker = null;
+      }
     }
+  }
+
+  async detectRegions(imageData: string | File | Blob): Promise<OcrResult> {
+    try {
+      const worker = await this.initializeWorker();
+      
+      const imageToProcess = typeof imageData === 'string' 
+        ? imageData 
+        : await this.fileToBase64(imageData);
+
+      const processedImage = await this.simplePreprocess(imageToProcess);
+      
+      await worker.setParameters(OCR_CONFIG);
+      const result = await worker.recognize(processedImage);
+
+      const regions = this.parseHOCR(result.data.hocr);
+      const ingredients = this.findIngredientsRegion(regions);
+
+      return {
+        regions,
+        ingredients,
+        rawText: result.data.text,
+        confidence: result.data.confidence
+      };
+    } catch (error) {
+      console.error('OCR failed:', error);
+      throw error;
+    }
+  }
+
+  private async simplePreprocess(imageData: string): Promise<string> {
+    if (!isOpenCVReady) {
+      await waitForOpenCV();
+    }
+
+    const sourceImage = await loadImage(imageData);
+    const mat = cv.imread(sourceImage);
+    const processed = new cv.Mat();
+
+    try {
+      // Convert to grayscale
+      cv.cvtColor(mat, processed, cv.COLOR_RGBA2GRAY);
+      
+      // Simple thresholding - good for clear black text
+      cv.threshold(processed, processed, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU);
+
+      // Convert back to base64
+      const canvas = document.createElement('canvas');
+      canvas.width = processed.cols;
+      canvas.height = processed.rows;
+      cv.imshow(canvas, processed);
+      return canvas.toDataURL('image/png');
+    } finally {
+      mat.delete();
+      processed.delete();
+    }
+  }
+
+  private async fileToBase64(file: File | Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  private parseHOCR(hocrData: string): TextRegion[] {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(hocrData, 'text/html');
+    const words = Array.from(doc.querySelectorAll('.ocrx_word'));
+    
+    return words.map(word => {
+      const title = word.getAttribute('title') || '';
+      const bbox = title.match(/bbox (\d+) (\d+) (\d+) (\d+)/);
+      const conf = title.match(/x_wconf (\d+)/);
+      
+      return {
+        text: word.textContent || '',
+        confidence: conf ? parseInt(conf[1]) / 100 : 0,
+        bbox: bbox ? {
+          x0: parseInt(bbox[1]),
+          y0: parseInt(bbox[2]),
+          x1: parseInt(bbox[3]),
+          y1: parseInt(bbox[4])
+        } : { x0: 0, y0: 0, x1: 0, y1: 0 }
+      };
+    });
+  }
+
+  private findIngredientsRegion(regions: TextRegion[]): TextRegion | undefined {
+    // Find regions that might contain "ingredients"
+    const ingredientHeaders = regions.filter(r => 
+      r.text.toLowerCase().includes('ingredient')
+    );
+
+    if (ingredientHeaders.length === 0) return undefined;
+
+    // Get the most likely ingredients header
+    const header = ingredientHeaders[0];
+    
+    // Find all regions below and to the right of the header
+    const ingredientsList = regions.filter(r => 
+      r.bbox.y0 >= header.bbox.y0 &&
+      r.bbox.x0 >= header.bbox.x0 &&
+      // Filter out nutrition facts and allergen info
+      !r.text.toLowerCase().includes('nutrition') &&
+      !r.text.toLowerCase().includes('allergen') &&
+      !r.text.toLowerCase().includes('contains')
+    );
+
+    // Combine into one region
+    if (ingredientsList.length > 0) {
+      const x0 = Math.min(...ingredientsList.map(r => r.bbox.x0));
+      const y0 = Math.min(...ingredientsList.map(r => r.bbox.y0));
+      const x1 = Math.max(...ingredientsList.map(r => r.bbox.x1));
+      const y1 = Math.max(...ingredientsList.map(r => r.bbox.y1));
+
+      return {
+        text: ingredientsList.map(r => r.text).join(' '),
+        confidence: ingredientsList.reduce((acc, r) => acc + r.confidence, 0) / ingredientsList.length,
+        bbox: { x0, y0, x1, y1 }
+      };
+    }
+
+    return undefined;
   }
 }
 

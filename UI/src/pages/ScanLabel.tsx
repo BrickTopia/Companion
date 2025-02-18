@@ -14,7 +14,7 @@ import { Card } from '@/components/ui/card';
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CameraCapture } from '@/components/camera/CameraCapture';
-import { ocrService } from '@/services/ocr';
+import { ocrService, type OcrResult } from '@/services/ocr';
 import { toast } from 'sonner';
 import { EditableIngredientList } from '@/components/ingredients/EditableIngredientList';
 import { useIngredients } from '@/services/ingredientService';
@@ -30,6 +30,7 @@ import { nanoid } from 'nanoid';
 import { ScannedLabel } from '@/types/scannedLabel';
 import Loading from '@/components/Loading';
 import type { Ingredient } from '@/types/ingredients';
+import { OcrDebugView } from '@/components/ocr/OcrDebugView';
 
 type Step = 'capture' | 'edit' | 'review';
 
@@ -55,20 +56,29 @@ const ScanLabel = () => {
   >([]);
   const dbIngredients = useIngredients();
   const [isSaving, setIsSaving] = useState(false);
+  const [ocrResult, setOcrResult] = useState<OcrResult | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   const processImage = async (imageData: string | File) => {
     setIsProcessing(true);
 
     try {
-      const result = await ocrService.extractText(imageData);
-      const ingredientsMatch = result.text.match(
-        /ingredients:?(.*?)(\.|\n|$)/i
-      );
-      const ingredients = ingredientsMatch
-        ? ingredientsMatch[1].trim()
-        : result.text;
+      // Store image URL for debug view
+      if (typeof imageData === 'string') {
+        setImageUrl(imageData);
+      } else {
+        setImageUrl(URL.createObjectURL(imageData));
+      }
 
-      setExtractedText(ingredients);
+      const result = await ocrService.extractText(imageData);
+      setOcrResult(result);
+
+      // Update extracted text from ingredients region if found
+      if (result.ingredients) {
+        setExtractedText(result.ingredients.text);
+      } else {
+        setExtractedText(result.rawText);
+      }
     } catch (error) {
       console.error('OCR error:', error);
       toast.error('Failed to process image. Please try again.');
@@ -331,18 +341,13 @@ const ScanLabel = () => {
             <h3 className="text-lg font-medium text-center">
               Review & Edit Ingredients
             </h3>
-            {imageFile && (
-              <div className="relative w-full h-48 md:h-64">
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  alt="Label preview"
-                  className="w-full h-full object-contain rounded-lg"
-                />
-              </div>
+            {imageUrl && ocrResult && (
+              <OcrDebugView
+                imageUrl={imageUrl}
+                regions={ocrResult.regions}
+                ingredients={ocrResult.ingredients}
+              />
             )}
-            <p className="text-center text-gray-600">
-              Review the detected ingredients and edit if needed
-            </p>
             <EditableIngredientList
               initialText={extractedText}
               onUpdate={analyzeIngredients}

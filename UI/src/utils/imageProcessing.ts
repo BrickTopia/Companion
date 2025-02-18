@@ -1,5 +1,7 @@
 import cv from '@techstark/opencv-js';
 import type { Mat, Size, Point, Scalar } from '@techstark/opencv-js';
+import { isOpenCVReady, waitForOpenCV } from './opencv';
+
 
 /**
  * Utility functions for image processing to improve OCR accuracy
@@ -11,73 +13,47 @@ declare global {
   }
 }
 
-let isOpenCVReady = false;
+export async function loadImage(src: string | File | Blob, timeout = 5000): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    
+    const timeoutId = setTimeout(() => {
+      reject(new Error('Image loading timed out'));
+    }, timeout);
 
-// Initialize OpenCV with proper error handling
-cv['onRuntimeInitialized'] = () => {
-  try {
-    // Test if core functions are available
-    if (cv.Mat && cv.imread && cv.imshow) {
-      console.log('OpenCV core functions verified');
-      isOpenCVReady = true;
+    img.onload = () => {
+      clearTimeout(timeoutId);
+      resolve(img);
+    };
+    
+    img.onerror = (error) => {
+      clearTimeout(timeoutId);
+      reject(error);
+    };
+    
+    if (typeof src === 'string') {
+      img.src = src;
     } else {
-      console.error('OpenCV initialization incomplete');
+      img.src = URL.createObjectURL(src);
     }
-  } catch (e) {
-    console.error('OpenCV initialization failed:', e);
-  }
-};
-
-window.onOpenCvReady = () => {
-  isOpenCVReady = true;
-};
+  });
+}
 
 /**
  * Applies a series of image processing steps to improve OCR results
  */
 export async function preprocessImage(imageData: string | File | Blob): Promise<ImageData> {
   try {
-    console.log('Starting image preprocessing...');
-    
     if (!isOpenCVReady) {
-      console.log('Waiting for OpenCV to initialize...');
       await waitForOpenCV();
-      console.log('OpenCV ready');
     }
 
-    console.log('Loading source image...');
     const sourceImage = await loadImage(imageData);
-    console.log('Source image loaded:', { 
-      width: sourceImage.width, 
-      height: sourceImage.height 
-    });
+    const mat = cv.imread(sourceImage);
+    const processed = new cv.Mat();
 
-    // Create initial canvas
-    const canvas = document.createElement('canvas');
-    canvas.width = sourceImage.width;
-    canvas.height = sourceImage.height;
-    const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    if (!ctx) {
-      throw new Error('Failed to get canvas context');
-    }
-    
-    // Draw image with white background to ensure proper contrast
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(sourceImage, 0, 0);
-    
-    const rawImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
     try {
-      console.log('Converting to OpenCV format...');
-      const mat = cv.matFromImageData(rawImageData);
-      
-      if (!mat || mat.empty()) {
-        throw new Error('Failed to create OpenCV matrix');
-      }
-
-      // Basic image enhancement
-      const processed = new cv.Mat();
+      // Basic cleanup
       cv.cvtColor(mat, processed, cv.COLOR_RGBA2GRAY);
       cv.GaussianBlur(processed, processed, new cv.Size(3, 3), 0);
       cv.adaptiveThreshold(
@@ -96,67 +72,20 @@ export async function preprocessImage(imageData: string | File | Blob): Promise<
       processedCanvas.height = processed.rows;
       cv.imshow(processedCanvas, processed);
 
-      // Cleanup
-      mat.delete();
-      processed.delete();
-
       // Get final ImageData
       const processedCtx = processedCanvas.getContext('2d');
       if (!processedCtx) {
         throw new Error('Failed to get processed canvas context');
       }
       return processedCtx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
-
-    } catch (cvError) {
-      console.error('OpenCV operation failed:', {
-        operation: cvError.message || 'unknown operation',
-        code: typeof cvError === 'number' ? cvError : undefined,
-        details: cvError
-      });
-      throw new Error(`OpenCV processing failed: ${cvError}`);
+    } finally {
+      mat.delete();
+      processed.delete();
     }
-    
   } catch (error) {
-    console.error('Image preprocessing failed:', {
-      errorType: error.constructor.name,
-      message: error.message,
-      code: error.code,
-      stack: error.stack
-    });
+    console.error('Image preprocessing failed:', error);
     throw error;
   }
-}
-
-// Helper function to wait for OpenCV to be ready
-function waitForOpenCV(): Promise<void> {
-  return new Promise((resolve) => {
-    if (isOpenCVReady) {
-      resolve();
-    } else {
-      const interval = setInterval(() => {
-        if (isOpenCVReady) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, 30);
-    }
-  });
-}
-
-// Helper function to load image from various sources
-async function loadImage(source: string | File | Blob): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous'; // Handle CORS issues
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    
-    if (typeof source === 'string') {
-      img.src = source;
-    } else {
-      img.src = URL.createObjectURL(source);
-    }
-  });
 }
 
 // Helper function to deskew image
@@ -302,5 +231,69 @@ function countCommaPatterns(img: cv.Mat): number {
   } catch (error) {
     console.error('Error counting comma patterns:', error);
     return 0;
+  }
+}
+
+export async function basicPreprocess(imageData: string | File | Blob): Promise<ImageData> {
+  try {
+    if (!isOpenCVReady) {
+      await waitForOpenCV();
+    }
+
+    const sourceImage = await loadImage(imageData);
+    
+    // Create initial canvas to draw the image
+    const canvas = document.createElement('canvas');
+    canvas.width = sourceImage.width;
+    canvas.height = sourceImage.height;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) {
+      throw new Error('Failed to get canvas context');
+    }
+
+    // Draw image with white background
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(sourceImage, 0, 0);
+
+    // Get image data for OpenCV
+    const imageDataForCV = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const mat = cv.matFromImageData(imageDataForCV);
+    const processed = new cv.Mat();
+
+    try {
+      // Basic cleanup
+      cv.cvtColor(mat, processed, cv.COLOR_RGBA2GRAY);
+      cv.GaussianBlur(processed, processed, new cv.Size(3, 3), 0);
+      cv.adaptiveThreshold(
+        processed,
+        processed,
+        255,
+        cv.ADAPTIVE_THRESH_GAUSSIAN_C,
+        cv.THRESH_BINARY,
+        11,
+        2
+      );
+
+      // Convert back to canvas
+      const processedCanvas = document.createElement('canvas');
+      processedCanvas.width = processed.cols;
+      processedCanvas.height = processed.rows;
+      cv.imshow(processedCanvas, processed);
+
+      // Get final ImageData
+      const processedCtx = processedCanvas.getContext('2d');
+      if (!processedCtx) {
+        throw new Error('Failed to get processed canvas context');
+      }
+      return processedCtx.getImageData(0, 0, processedCanvas.width, processedCanvas.height);
+    } finally {
+      // Cleanup OpenCV objects
+      mat.delete();
+      processed.delete();
+    }
+  } catch (error) {
+    console.error('Basic preprocessing failed:', error);
+    throw error;
   }
 } 
