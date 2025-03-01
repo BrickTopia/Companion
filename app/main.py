@@ -9,25 +9,27 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 SEARCH_API_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 
 def get_product_info(product_data):
-            # Extract necessary components
+        # Extract necessary components
+        product = product_data['product'] if 'product' in product_data else product_data
+
         product_info = {
             "code": product_data['code'],
             "product": {
-                "name": product_data['product'].get('product_name', 'Unknown Product'),
-                "brands": product_data['product'].get('brands', 'Unknown Brand'),
-                "allergens": product_data['product'].get('allergens_tags', []),
-                "ingredients": product_data['product'].get('ingredients_text', 'No ingredients listed').split(', '),
-                "is_gluten_free": "gluten" not in product_data['product'].get('ingredients_text', '').lower(),
-                "categories": product_data['product'].get('categories_tags', []),
-                "image_url": product_data['product'].get('image_url', ''),
+                "name": product.get('product_name', 'Unknown Product'),
+                "brands": product.get('brands', 'Unknown Brand'),
+                "allergens": product.get('allergens_tags', []),
+                "ingredients": product.get('ingredients_text', 'No ingredients listed').split(', '),
+                "is_gluten_free": "gluten" not in product.get('ingredients_text', '').lower(),
+                "categories": product.get('categories_tags', []),
+                "image_url": product.get('image_url', ''),
                 "nutritional_info": {
-                    "energy_kcal": product_data['product'].get('nutriments', {}).get('energy-kcal_100g', 0),
-                    "fat": product_data['product'].get('nutriments', {}).get('fat_100g', 0),
-                    "saturated_fat": product_data['product'].get('nutriments', {}).get('saturated-fat_100g', 0),
-                    "carbohydrates": product_data['product'].get('nutriments', {}).get('carbohydrates_100g', 0),
-                    "sugars": product_data['product'].get('nutriments', {}).get('sugars_100g', 0),
-                    "proteins": product_data['product'].get('nutriments', {}).get('proteins_100g', 0),
-                    "salt": product_data['product'].get('nutriments', {}).get('salt_100g', 0)
+                    "energy_kcal": product.get('nutriments', {}).get('energy-kcal_100g', 0),
+                    "fat": product.get('nutriments', {}).get('fat_100g', 0),
+                    "saturated_fat": product.get('nutriments', {}).get('saturated-fat_100g', 0),
+                    "carbohydrates": product.get('nutriments', {}).get('carbohydrates_100g', 0),
+                    "sugars": product.get('nutriments', {}).get('sugars_100g', 0),
+                    "proteins": product.get('nutriments', {}).get('proteins_100g', 0),
+                    "salt": product.get('nutriments', {}).get('salt_100g', 0)
                 }
             }
         }
@@ -78,9 +80,11 @@ async def search_products(
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Error fetching search results")
         
-        search_data = response.json()
+        products = []
+        for product in response.json()['products']:
+            products.append(get_product_info(product))
         
-        return search_data
+        return products
 
 # GET PRODUCT BY BARCODE
 ## Rate Limit : 100 RPM

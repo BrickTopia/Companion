@@ -35,8 +35,7 @@ def test_search_products_with_user_header():
     
     # Assert the response contains expected data
     data = response.json()
-    assert "products" in data
-    assert len(data["products"]) > 0
+    assert len(data) > 0
 
 # debug
 def main():
