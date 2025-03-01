@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from typing import Optional
 import httpx
 from starlette.middleware.trustedhost import TrustedHostMiddleware
+from mangum import Mangum
 
 app = FastAPI()
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
@@ -108,3 +109,6 @@ async def get_product_by_barcode(barcode: str, request: Request, product_type: s
         
         product_data = response.json()
         return get_product_info(product_data)
+
+# Wrap FastAPI with Mangum for AWS Lambda
+handler = Mangum(app)
