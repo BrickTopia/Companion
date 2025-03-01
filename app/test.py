@@ -39,11 +39,11 @@ def test_search_products_with_user_header():
     assert len(data["products"]) > 0
 
 # debug
-# def main():
-#     # Call the test functions
-#     test_get_product_by_barcode()
-#     test_search_products_with_user_header()
-#     print("All tests passed!")
+def main():
+    # Call the test functions
+    test_get_product_by_barcode()
+    test_search_products_with_user_header()
+    print("All tests passed!")
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

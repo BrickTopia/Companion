@@ -73,6 +73,8 @@ async def search_products(
 
     async with httpx.AsyncClient() as client:
         response = await client.get(SEARCH_API_URL, params=params, headers=headers)
+        if response.status_code == 429:
+            raise HTTPException(status_code=429, detail="Too many requests. Please try again in 1 minute.")
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail="Error fetching search results")
         
