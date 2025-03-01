@@ -1,4 +1,4 @@
-import type { Ingredient } from '@/types/ingredients';
+import type { Ingredient, IngredientStatus } from '@/types/ingredients';
 
 // Raw DTO from API
 export interface IngredientDTO {
@@ -23,16 +23,15 @@ export interface IngredientsResponse {
 }
 
 // Map status from API to our internal status
-const mapStatus = (status: string): 'safe' | 'risk' | 'risky' | 'unknown' => {
+const mapStatus = (status: string): IngredientStatus => {
   switch (status.toUpperCase()) {
     case 'ALLOWED':
-      return 'safe';
-    case 'NOT ALLOWED':
-      return 'risk';
-    case 'CHECK LABEL':
-      return 'risky';
     case 'GLUTEN-FREE CLAIM':
       return 'safe';
+    case 'NOT ALLOWED':
+      return 'unsafe';
+    case 'CHECK LABEL':
+      return 'caution';
     default:
       return 'unknown';
   }
@@ -49,10 +48,12 @@ export const mapIngredientDTO = (dto: IngredientDTO): Ingredient => {
     .map(i => dto[`aliases/${i}` as keyof IngredientDTO])
     .filter((alias): alias is string => !!alias);
 
+  const status = mapStatus(dto.status);
+
   return {
     id: dto.id.toString(),
     name: dto.key.replace(/_/g, ' '),
-    status: mapStatus(dto.status),
+    status,
     description: dto.description,
     alternateNames: [...alternateNames, ...aliases],
     category: 'other', // Default category since API doesn't provide it
