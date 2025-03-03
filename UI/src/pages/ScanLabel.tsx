@@ -31,6 +31,7 @@ import { ScannedLabel } from '@/types/scannedLabel';
 import Loading from '@/components/Loading';
 import type { Ingredient } from '@/types/ingredients';
 import { OcrDebugView } from '@/components/ocr/OcrDebugView';
+import BarcodeScanner from '@/components/BarcodeScanner';
 
 type Step = 'capture' | 'edit' | 'review';
 
@@ -58,6 +59,7 @@ const ScanLabel = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [ocrResult, setOcrResult] = useState<OcrResult | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
+  const [scanning, setScanning] = useState(false);
 
   const processImage = async (imageData: string | File) => {
     setIsProcessing(true);
@@ -465,6 +467,28 @@ const ScanLabel = () => {
     }
   };
 
+  const handleScanBarcode = () => {
+    setScanning(true);
+  };
+
+  const handleBarcodeDetected = async (barcode) => {
+    setScanning(false);
+    try {
+      const response = await fetch(`https://mduwaksiu4.execute-api.us-east-2.amazonaws.com/Prod/products/${barcode}`);
+      if (!response.ok) throw new Error('Failed to fetch product information');
+      const productInfo = await response.json();
+      
+      // TODO:Handle and display productInfo, @krisna
+      console.log('Product Info:', productInfo);
+    } catch (error) {
+      console.error('Error fetching product info:', error);
+    }
+  };
+
+  const handleCloseScanner = () => {
+    setScanning(false);
+  };
+
   return (
     <>
       {showCamera && (
@@ -495,6 +519,10 @@ const ScanLabel = () => {
               renderStep()
             )}
           </Card>
+          <Button onClick={handleScanBarcode}>
+            Scan Barcode
+          </Button>
+          {scanning && <BarcodeScanner onDetected={handleBarcodeDetected} onClose={handleCloseScanner} />}
         </div>
       </div>
     </>

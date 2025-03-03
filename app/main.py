@@ -1,12 +1,18 @@
 from fastapi import FastAPI, HTTPException, Request
 from typing import Optional
 import httpx
-from starlette.middleware.trustedhost import TrustedHostMiddleware
 from mangum import Mangum
 
-app = FastAPI()
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 SEARCH_API_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 
 def get_product_info(product_data):
