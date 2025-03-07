@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { initializeIngredientMatchers } from '@/utils/textProcessing';
 import { useIngredients } from '@/services/ingredientService';
+import MoondreamProcessedImage from './pages/Moondream';
 
 function App() {
   const { error } = useIndexedDB();
@@ -41,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/scan" element={<ScanLabel />} />
+            <Route path="/moondream" element={<MoondreamProcessedImage />} /> 
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

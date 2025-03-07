@@ -73,7 +73,8 @@
     "workbox-routing": "^7.0.0",
     "workbox-strategies": "^7.0.0",
     "workbox-window": "^7.0.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "moondream": "^0.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -86,6 +87,8 @@
     "@types/workbox-routing": "^5.0.0",
     "@types/workbox-strategies": "^5.0.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "@capacitor/camera": "^7.0.0",
+    "@ionic/react": "^8.4.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
