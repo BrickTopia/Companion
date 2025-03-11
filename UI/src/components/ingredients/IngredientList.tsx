@@ -1,19 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { AlertCircle } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  initDB,
-  saveFavorite,
-  removeFavorite,
-  getFavorites,
-  getIngredients,
-} from '@/utils/indexedDB';
+import { saveFavorite, removeFavorite, getFavorites } from '@/utils/indexedDB';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card } from '@/components/ui/card';
 import { IngredientDetail } from './IngredientDetail';
 import { IngredientSearch } from './IngredientSearch';
 import { IngredientCard } from './IngredientCard';
-import { IngredientSkeleton } from './IngredientSkeleton';
 import type { Ingredient } from '@/types/ingredients';
 import { FilterSort } from './FilterSort';
 import type { IngredientStatus } from '@/types/ingredients';
@@ -33,26 +26,29 @@ const mockIngredients: Ingredient[] = [
     tags: ['staple', 'gluten-free'],
     lastUpdated: '2024-03-15',
     scientificName: 'Oryza sativa',
+    alternateNames: [],
   },
   {
     id: '2',
     name: 'Barley',
-    status: 'risk',
+    status: 'unsafe',
     description: 'Contains gluten, unsafe for celiac consumption.',
     category: 'grain',
     tags: ['contains-gluten'],
     lastUpdated: '2024-03-15',
     scientificName: 'Hordeum vulgare',
+    alternateNames: [],
   },
   {
     id: '3',
     name: 'Oats',
-    status: 'risky',
+    status: 'caution',
     description: 'May be contaminated with gluten during processing.',
     category: 'grain',
     tags: ['cross-contamination'],
     lastUpdated: '2024-03-15',
     scientificName: 'Avena sativa',
+    alternateNames: [],
   },
   {
     id: '4',
@@ -63,6 +59,7 @@ const mockIngredients: Ingredient[] = [
     tags: ['ancient-grain', 'gluten-free'],
     lastUpdated: '2024-03-15',
     scientificName: 'Chenopodium quinoa',
+    alternateNames: [],
   },
   {
     id: '5',
@@ -72,6 +69,7 @@ const mockIngredients: Ingredient[] = [
     category: 'additive',
     tags: ['additive', 'processed'],
     lastUpdated: '2024-03-15',
+    alternateNames: [],
   },
 ];
 
@@ -83,19 +81,15 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     IngredientStatus | 'all'
   >('all');
   const [sortOrder, setSortOrder] = useState<'name' | 'status'>('name');
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showOnlyFavoritesState, setShowOnlyFavoritesState] =
     useState(showOnlyFavorites);
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
   const { toast } = useToast();
-  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const {
-    ingredients: fetchedIngredients,
-    isLoading: isLoadingIngredients,
-    error: fetchError,
-  } = useIngredients();
+
+  // Use the service directly
+  const ingredients = useIngredients();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -105,27 +99,18 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
   }, [searchTerm]);
 
   useEffect(() => {
-    const initialize = async () => {
+    const loadFavorites = async () => {
       try {
-        await initDB();
         const savedFavorites = await getFavorites();
         setFavorites(savedFavorites);
       } catch (err) {
         setError('Failed to load favorites. Please refresh the page.');
-        console.error('Error initializing:', err);
-      } finally {
-        setIsLoading(false);
+        console.error('Error loading favorites:', err);
       }
     };
 
-    initialize();
+    loadFavorites();
   }, []);
-
-  useEffect(() => {
-    if (fetchedIngredients) {
-      setIngredients(fetchedIngredients);
-    }
-  }, [fetchedIngredients]);
 
   const toggleFavorite = useCallback(
     async (ingredient: Ingredient) => {
@@ -158,22 +143,31 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
 
   const filteredIngredients = useMemo(() => {
     return ingredients
-      .filter((ingredient) => {
+      .filter((ingredient): ingredient is Ingredient => {
+        // Type guard to ensure ingredient is valid
+        if (!ingredient || typeof ingredient !== 'object') return false;
+
         const matchesSearch =
           !debouncedSearch ||
-          ingredient.name.toLowerCase().includes(debouncedSearch.toLowerCase());
+          (ingredient.name
+            ?.toLowerCase()
+            ?.includes(debouncedSearch.toLowerCase()) ??
+            false);
         const matchesFavorites =
-          !showOnlyFavoritesState || favorites.includes(ingredient.id);
+          !showOnlyFavoritesState || favorites.includes(ingredient.id ?? '');
         const matchesStatus =
           selectedStatus === 'all' || ingredient.status === selectedStatus;
         return matchesSearch && matchesFavorites && matchesStatus;
       })
       .sort((a, b) => {
         if (sortOrder === 'name') {
-          return a.name.localeCompare(b.name);
+          return (a.name ?? '').localeCompare(b.name ?? '');
         } else {
           const statusPriority = { safe: 0, risky: 1, unknown: 2, risk: 3 };
-          return statusPriority[a.status] - statusPriority[b.status];
+          return (
+            (statusPriority[a.status ?? 'unknown'] ?? 2) -
+            (statusPriority[b.status ?? 'unknown'] ?? 2)
+          );
         }
       });
   }, [
@@ -185,22 +179,16 @@ const IngredientList = ({ showOnlyFavorites = false }: IngredientListProps) => {
     sortOrder,
   ]);
 
-  if (error || fetchError) {
+  if (error) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          {error ||
-            fetchError?.message ||
-            'Failed to load data. Please refresh the page.'}
+          {error || 'Failed to load data. Please refresh the page.'}
         </AlertDescription>
       </Alert>
     );
-  }
-
-  if (isLoading || isLoadingIngredients) {
-    return <IngredientSkeleton />;
   }
 
   return (

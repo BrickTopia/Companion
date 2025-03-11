@@ -1,4 +1,4 @@
-export type IngredientStatus = 'safe' | 'risky' | 'risk' | 'unknown';
+export type IngredientStatus = 'safe' | 'unsafe' | 'caution' | 'unknown';
 
 export type IngredientCategory = 'grain' | 'dairy' | 'protein' | 'additive' | 'other';
 
@@ -16,4 +16,5 @@ export interface Ingredient {
     date: string;
     change: string;
   }[];
+  aliases?: string[];
 }

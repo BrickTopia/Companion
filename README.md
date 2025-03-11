@@ -51,3 +51,28 @@ This is a FastAPI application that helps celiacs determine if a certain food con
 
 - **Search for an ingredient**: `GET /v1/foods?q={query}`
 - **Search food by product id/food id**: `GET /v1/foods/{foodId}`
+
+# FastAPI Application
+
+## Running Tests
+
+To ensure the functionality of the application, you can run the tests using `pytest`. Follow the instructions below:
+
+### Running the Tests
+
+1. Navigate to the directory containing your test files.
+2. Run the following command to execute the tests:
+
+```bash
+pytest test_app.py
+```
+
+This command will run all the tests defined in `test_app.py`. If you want to run all tests in the directory, simply use:
+
+```bash
+pytest
+```
+
+### Test Output
+
+After running the tests, you will see output indicating which tests passed or failed. Ensure all tests pass to confirm that the application is functioning as expected.

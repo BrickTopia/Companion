@@ -1,24 +1,14 @@
 import { Card } from '@/components/ui/card';
-import { Search, Info, Settings } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Search, Info, Settings, Camera } from 'lucide-react';
+import { useState } from 'react';
 import IngredientList from '@/components/ingredients/IngredientList';
 import { SettingsPanel } from '@/components/settings/SettingsPanel';
-
-// Create a promise outside the component
-let loadingPromise: Promise<void> | null = new Promise((resolve) => {
-  setTimeout(() => {
-    resolve();
-    loadingPromise = null;
-  }, 10000);
-});
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('ingredients');
-
-  // Throw the promise if it exists
-  if (loadingPromise) {
-    throw loadingPromise;
-  }
+  const navigate = useNavigate();
 
   const renderContent = () => {
     switch (activeTab) {
@@ -48,6 +38,16 @@ const Index = () => {
       <header className="fixed top-0 left-0 right-0 bg-white/70 backdrop-blur-sm border-b border-white/20 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-800">Celiac Safe</h1>
+          {activeTab === 'ingredients' && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/scan')}
+              className="ml-2"
+            >
+              <Camera className="h-5 w-5" />
+            </Button>
+          )}
         </div>
       </header>
 

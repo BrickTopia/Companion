@@ -1,6 +1,5 @@
-
 import { useParams } from 'react-router-dom';
-import { IngredientDetail } from "@/components/ingredients/IngredientDetail";
+import { IngredientDetail } from '@/components/ingredients/IngredientDetail';
 import { useState, useEffect } from 'react';
 import type { Ingredient } from '@/types/ingredients';
 
@@ -19,8 +18,9 @@ const IngredientDetailPage = () => {
       description: 'This is a sample ingredient description.',
       category: 'other',
       tags: ['sample'],
+      alternateNames: ['Sample Ingredient', 'Sample'],
       lastUpdated: new Date().toISOString(),
-      scientificName: 'Sample scientificus'
+      scientificName: 'Sample scientificus',
     };
     setIngredient(mockIngredient);
   }, [id]);
