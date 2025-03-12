@@ -43,6 +43,9 @@ function App() {
     tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
   });
 
+  <script data-goatcounter="https://bricktopia.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
   const { error } = useIndexedDB();
   const ingredients = useIngredients();
 
