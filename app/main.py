@@ -1,13 +1,32 @@
 from fastapi import FastAPI, HTTPException, Request
 from typing import Optional
 import httpx
-from starlette.middleware.trustedhost import TrustedHostMiddleware
 from mangum import Mangum
+import sentry_sdk
+
+from fastapi.middleware.cors import CORSMiddleware
+
+sentry_sdk.init(
+    dsn="https://033069042874cb0c66a082acc26953c1@o4508967113326592.ingest.us.sentry.io/4508967120011264",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
 
 app = FastAPI()
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 SEARCH_API_URL = "https://world.openfoodfacts.org/cgi/search.pl"
+
+@app.get("/sentry-debug")
+async def trigger_error():
+    print("Brick Inc loading")
+    division_by_zero = 1 / 0
 
 def get_product_info(product_data):
         # Extract necessary components

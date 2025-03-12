@@ -37,6 +37,11 @@ def test_search_products_with_user_header():
     data = response.json()
     assert len(data) > 0
 
+def test_sentry_backend():
+    response = client.get(f"/sentry-debug/")
+    # Assert the response status code
+    assert response.status_code == 200
+
 # debug
 def main():
     # Call the test functions
