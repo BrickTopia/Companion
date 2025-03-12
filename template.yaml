@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  FastAPILambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main.handler  # Entry point (Mangum wraps FastAPI)
+      Runtime: python3.9
+      CodeUri: app/
+      MemorySize: 512
+      Timeout: 30
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ApiGateway:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY

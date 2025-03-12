@@ -6,7 +6,7 @@
     <title>Celiac Safe - Ingredient Checker</title>
     <meta name="description" content="Check ingredients for celiac safety" />
     <meta name="theme-color" content="#7BC697" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Celiac Safe" />
     <meta name="author" content="BrickTopia" />
@@ -21,5 +21,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
   </body>
 </html>

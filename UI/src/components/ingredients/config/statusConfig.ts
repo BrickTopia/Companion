@@ -1,4 +1,3 @@
-
 import type { IngredientStatus } from "@/types/ingredients";
 
 export const statusConfig: Record<IngredientStatus, { color: string; description: string }> = {
@@ -6,11 +5,11 @@ export const statusConfig: Record<IngredientStatus, { color: string; description
     color: 'bg-green-500',
     description: 'Safe for celiac consumption'
   },
-  risky: { 
+  caution: { 
     color: 'bg-yellow-500',
     description: 'May contain traces of gluten - verify source'
   },
-  risk: { 
+  unsafe: { 
     color: 'bg-red-500',
     description: 'Contains gluten - unsafe for celiac consumption'
   },

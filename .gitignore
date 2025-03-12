@@ -1,4 +1,17 @@
+# Python virtual environment
 venv/
+
+# AWS SAM build artifacts
+.aws-sam/
+
+# Python bytecode files
 __pycache__/
 *.pyc
+
+# Ignore requirements.txt if it's auto-generated
+requirements.txt
+
+# Temporary files
 .DS_Store
+.idea/
+*.swp
