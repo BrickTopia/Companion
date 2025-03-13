@@ -3,6 +3,9 @@ from typing import Optional
 import httpx
 from mangum import Mangum
 import sentry_sdk
+import boto3
+from datetime import datetime, timedelta
+import json
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -23,10 +26,78 @@ app.add_middleware(
 )
 SEARCH_API_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 
-@app.get("/sentry-debug")
-async def trigger_error():
-    print("Brick Inc loading")
-    division_by_zero = 1 / 0
+# Initialize DynamoDB client
+dynamodb = boto3.resource('dynamodb')
+rate_limit_table = dynamodb.Table('RateLimits')
+
+def check_rate_limit(ip_address: str, limit: int = 10, window_hours: int = 24) -> dict:
+    """Check if the IP address has exceeded the rate limit."""
+    try:
+        # Get current timestamp
+        now = datetime.utcnow()
+        window_start = now - timedelta(hours=window_hours)
+        
+        # Query DynamoDB for requests in the time window
+        response = rate_limit_table.query(
+            KeyConditionExpression='ip_address = :ip AND request_time > :window_start',
+            ExpressionAttributeValues={
+                ':ip': ip_address,
+                ':window_start': window_start.isoformat()
+            }
+        )
+        
+        # Count requests in the window
+        request_count = len(response.get('Items', []))
+        
+        # Check if limit exceeded
+        is_limited = request_count >= limit
+        
+        return {
+            'is_limited': is_limited,
+            'current_count': request_count,
+            'limit': limit,
+            'window_hours': window_hours,
+            'reset_time': (now + timedelta(hours=window_hours)).isoformat()
+        }
+    except Exception as e:
+        # Log the error and return a safe default
+        print(f"Error checking rate limit: {str(e)}")
+        return {
+            'is_limited': False,
+            'current_count': 0,
+            'limit': limit,
+            'window_hours': window_hours,
+            'reset_time': (now + timedelta(hours=window_hours)).isoformat()
+        }
+
+def record_request(ip_address: str) -> None:
+    """Record a new request for the IP address."""
+    try:
+        now = datetime.utcnow()
+        rate_limit_table.put_item(
+            Item={
+                'ip_address': ip_address,
+                'request_time': now.isoformat(),
+                'ttl': int((now + timedelta(hours=24)).timestamp())
+            }
+        )
+    except Exception as e:
+        print(f"Error recording request: {str(e)}")
+
+@app.get("/rate-limit-check")
+async def rate_limit_check(
+    request: Request,
+    limit: int = 10,
+    window_hours: int = 24
+):
+    """Check if the requesting IP has exceeded the rate limit."""
+    ip_address = request.client.host
+    result = check_rate_limit(ip_address, limit, window_hours)
+    
+    # Record this check request
+    record_request(ip_address)
+    
+    return result
 
 def get_product_info(product_data):
         # Extract necessary components

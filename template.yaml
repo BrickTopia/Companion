@@ -2,6 +2,25 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+  RateLimitsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: RateLimits
+      AttributeDefinitions:
+        - AttributeName: ip_address
+          AttributeType: S
+        - AttributeName: request_time
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ip_address
+          KeyType: HASH
+        - AttributeName: request_time
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
   FastAPILambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -12,9 +31,16 @@ Resources:
       Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref RateLimitsTable
       Events:
         ApiGateway:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
